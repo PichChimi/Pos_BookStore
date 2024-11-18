@@ -83,7 +83,8 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $book->id }}</td>
+                                    {{-- <td>{{ $book->id }}</td> --}}
+                                    <td>{{ $loop->parent->iteration }}</td>
                                     <td>
                                        <a href="#!"><img src="{{ Storage::url($book->cover_book) }}" alt="" class="icon-shape icon-md" /></a>
                                     </td>
@@ -188,10 +189,10 @@
                                              </select>
                                          </div>
 
-                                         <div class="mb-3">
+                                         {{-- <div class="mb-3">
                                           <label for="barcode" class="form-label">Barcode</label>
                                           <input type="text" class="form-control" id="barcode" name="barcode">
-                                      </div>
+                                      </div> --}}
 
                                       </div>
                                       
@@ -201,11 +202,7 @@
                                       </div>
 
                                   </div>
-              
-                                  
-              
-                                  
-              
+   
                                   <!-- Dynamic Save/Update Button -->
                                   <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
                               </form>
@@ -326,7 +323,7 @@
                                  $('#title_kh').val(data.title_kh);
                                  $('#authors_id').val(data.authors_id);
                                  $('#genres_id').val(data.genres_id);
-                                 $('#barcode').val(data.barcode);
+                                 // $('#barcode').val(data.barcode);
                                  $('#des').val(data.des);
                                  $('#cover_book').val('');
                                  $('#btnSave').text('Update'); // Change button text

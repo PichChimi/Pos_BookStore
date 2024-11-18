@@ -14,12 +14,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Role</h2>
+                  <h2>{{ __('globle.role') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Role</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addrole') }}</a>
                </div>
             </div>
          </div>
@@ -33,15 +33,15 @@
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
                         <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
+                           <input class="form-control" type="search" placeholder="{{ __('globle.searchrole') }}" aria-label="Search" />
                         </form>
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -60,9 +60,9 @@
                                  </div>
 
                               </th>
-                              <th>No</th>
-                              <th>Name</th>
-                              <th>Action</th>
+                              <th>{{ __('globle.no') }}</th>
+                              <th>{{ __('globle.name') }}</th>
+                              <th>{{ __('globle.action') }}</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -77,8 +77,9 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $role->id }}</td>
-
+                                    {{-- <td>{{ $role->id }}</td> --}}
+                                    
+                                    <td>{{ $loop->iteration }}</td>
                                     <td data-name-en="{{ $role->name_en }}" data-name-kh="{{ $role->name_kh }}">
                                        {{ $role->{'name_' . app()->getLocale()} }}
                                     </td>
@@ -92,13 +93,13 @@
                                              <li>
                                                 <a class="dropdown-item btnDelete" href="#">
                                                    <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
+                                                   <span class="text-danger">{{ __('globle.') }}</span>
                                                 </a>
                                              </li>
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#">
                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
+                                                   {{ __('globle.') }}
                                                 </a>
                                              </li>
                                           </ul>

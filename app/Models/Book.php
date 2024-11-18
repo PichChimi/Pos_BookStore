@@ -29,10 +29,15 @@ class Book extends Model
         return $this->belongsTo(Authors::class);
     }
 
+    // public function genres(): BelongsTo
+    // {
+    //     return $this->belongsTo(Genres::class);
+    // }
+
     public function genres(): BelongsTo
-    {
-        return $this->belongsTo(Genres::class);
-    }
+        {
+            return $this->belongsTo(Genres::class, 'genres_id');
+        }
 
     public function stocks(): HasMany
     {

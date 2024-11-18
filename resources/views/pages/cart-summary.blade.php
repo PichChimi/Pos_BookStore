@@ -1,6 +1,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
+ <!-- Invoice Container (hidden initially) -->
+ <div id="invoice-container" style="display: none;">
+    <!-- Invoice will be dynamically added here -->
+</div>
 <ul id="cart-summary">
     @forelse($cartItems as $cartItem)
         <li class="list-group-item py-3 ps-0 border-top" id="cart-item-{{ $cartItem->id }}">
@@ -43,6 +46,7 @@
         <li class="list-group-item text-center">Your cart is empty.</li>
     @endforelse
 
+  
     <table class="table table-striped">
         <thead>
             <tr class="table-primary">
@@ -62,5 +66,8 @@
         </tbody>
     </table>
 </ul>
+<!-- Invoice Container -->
+
+
 
 

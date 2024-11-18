@@ -80,7 +80,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $supplier->id }}</td>
+                                    <td>{{ $loop->index + 1 }}</td>
 
                                     <td data-name-en="{{ $supplier->name_en }}" data-name-kh="{{ $supplier->name_kh }}">
                                        {{ $supplier->{'name_' . app()->getLocale()} }}

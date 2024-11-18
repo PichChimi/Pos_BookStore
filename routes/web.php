@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LocalizationController;
+use App\Exports\SalesReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,11 @@ use App\Http\Controllers\LocalizationController;
 Auth::routes();
 
 Route::get('/locale/{locale}',[LocalizationController::class, 'setLang'])->name('lang');
+
+// Route::get('/sales-report/export', function () {
+//     return Excel::download(new SalesReportExport, 'sales_report.xlsx');
+// })->name('sales.report.export');
+
 
 Route::group([
      'middleware' => 'auth'
@@ -42,7 +49,6 @@ Route::group([
          Route::delete('/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('user.delete');
          Route::post('/delete-selected', [App\Http\Controllers\UserController::class, 'deleteSelected'])->name('user.deleteSelected');
     
-        
      });
     
     Route::group([
@@ -85,6 +91,7 @@ Route::group([
         Route::get('/edit/{id}', [App\Http\Controllers\BookController::class, 'edit'])->name('book.edit'); // For loading user data in modal
         Route::delete('/delete', [App\Http\Controllers\BookController::class, 'delete'])->name('book.delete');
         Route::post('/delete-selected', [App\Http\Controllers\BookController::class, 'deleteSelected'])->name('book.deleteSelected');
+        Route::get('/books-by-genre', [App\Http\Controllers\BookController::class, 'getBooksByGenre'])->name('books.by.genre');
     });
     
     Route::group([
@@ -119,6 +126,14 @@ Route::group([
          Route::post('/pay', [App\Http\Controllers\CartController::class, 'pay'])->name('cart.pay');
 
      });
+
+    //  Route::get('/reports/sales', [App\Http\Controllers\ReportController::class, 'salesReport'])->name('reports.sales');
+     
+     Route::get('/reports/sales', [App\Http\Controllers\ReportController::class, 'salesReport'])->name('reports.sales');
+     Route::get('sales/report/export', [App\Http\Controllers\ReportController::class, 'exportSalesReport'])->name('sales.report.export');
+     Route::get('/reports/employee-sales', [App\Http\Controllers\ReportController::class, 'getEmployeeSalesReport'])->name('reports.employeeSales');
+     Route::get('employee-sales-report/export', [App\Http\Controllers\ReportController::class, 'exportEmployeeSalesReport'])->name('employeeSalesReport.export');
+    
     
  });
 

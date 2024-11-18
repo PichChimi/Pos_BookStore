@@ -112,11 +112,11 @@
           <div class="row w-100 align-items-center gx-lg-2 gx-0">
              <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
                 <a class="navbar-brand d-none d-lg-block" href="{{ route('page.index') }}">
-                   <img src="assets/images/logo/freshcart-logo.svg" alt="eCommerce HTML Template"/>
+                   <img src="{{ asset('assets/images/logo/freshcart-logo.svg') }}" alt="eCommerce HTML Template"/>
                 </a>
                 <div class="d-flex justify-content-between w-100 d-lg-none">
                    <a class="navbar-brand" href="{{ route('page.index') }}">
-                      <img src="assets/images/logo/freshcart-logo.svg" alt="eCommerce HTML Template"/>
+                      <img src="{{ asset('assets/images/logo/freshcart-logo.svg') }}" alt="eCommerce HTML Template"/>
                    </a>
                 </div>
              </div>
@@ -154,28 +154,7 @@
              </div>
              <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7">
                 <div class="list-inline">
-                   <div class="list-inline-item me-5">
-                      <a href="#" class="text-muted position-relative">
-                         <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-heart">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                         </svg>
-                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                            5
-                            <span class="visually-hidden">unread messages</span>
-                         </span>
-                      </a>
-                   </div>
-
+                   
                     @guest
   
                         <div class="list-inline-item me-5 ">
@@ -203,9 +182,13 @@
                             
                               <div class="dropdown list-inline-item me-5">
                                  <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
-                                 </a>
-                              
+                                    @if(Auth::user())
+                                        <img src="{{ Storage::url(Auth::user()->profile) }}" alt="User Profile" class="avatar avatar-md rounded-circle" />
+                                    @else
+                                        <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt="Default Profile" class="avatar avatar-md rounded-circle" />
+                                    @endif
+                                </a>
+
                                  <div class="dropdown-menu dropdown-menu-end p-0">
                                     <div class="lh-1 px-5 py-4 border-bottom">
                                        <h5 class="mb-1 h6">{{ Auth::user()->name }}</h5>
@@ -246,33 +229,7 @@
                                  }
                            </script>
 
-               
-                   <div class="list-inline-item me-5 me-lg-0">
-                      <a class="text-muted position-relative" href="#"aria-controls="offcanvasRight">
-                         <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-shopping-bag">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                         </svg>
-                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                            1
-                            <span class="visually-hidden">unread messages</span>
-                         </span>
-                      </a>
-                   </div>
-
-                   
-
+            
                    <div class="list-inline-item d-inline-block d-lg-none">
                       <!-- Button -->
                       <button
@@ -335,43 +292,60 @@
                 </div>
                 
                 <div>
-                   <ul class="navbar-nav align-items-center">
-                      <li class="nav-item dropdown w-100 w-lg-auto">
-                         <a class="nav-link" href="{{ route('page.index') }}">{{ __('globle.home') }}</a>
-                      </li>
+                  <ul class="navbar-nav align-items-center">
 
-                      <li class="nav-item dropdown w-100 w-lg-auto">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">System</a>
-                        <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li>
-                           <li><a class="dropdown-item" href="{{ route('role.index') }}">Role</a></li>
-                           
-                        </ul>
-                     </li>
-
-                    
-                      <li class="nav-item dropdown w-100 w-lg-auto">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Product</a>
-                        <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="{{ route('book.index') }}">Book</a></li>
-                           <li><a class="dropdown-item" href="{{ route('genres.index') }}">Genres</a></li>
-                           <li><a class="dropdown-item" href="{{ route('author.index') }}">Authors</a></li>
-                        </ul>
-                     </li>
-
+                     @can('homeList')
                      <li class="nav-item dropdown w-100 w-lg-auto">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inventory</a>
-                        <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="{{ route('stock.index') }}">Stock</a></li>
-                           <li><a class="dropdown-item" href="{{ route('supplier.index') }}">Supplier</a></li>
-                        </ul>
+                         <a class="nav-link {{ request()->routeIs('page.index') ? 'active' : '' }}" href="{{ route('page.index') }}" style="{{ request()->routeIs('page.index') ? 'color: green;' : '' }}">{{ __('globle.home') }}</a>
                      </li>
+                     @endcan
+                 
+                     @can('systemList')
+                     <li class="nav-item dropdown w-100 w-lg-auto">
+                         <a class="nav-link dropdown-toggle {{ request()->routeIs('user.index') || request()->routeIs('role.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('user.index') || request()->routeIs('role.index')) ? 'color: green;' : '' }}">{{ __('globle.system') }}</a>
+                         <ul class="dropdown-menu">
+                             <li><a class="dropdown-item {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}" style="{{ request()->routeIs('user.index') ? 'color: green;' : '' }}">{{ __('globle.user') }}</a></li>
+                             <li><a class="dropdown-item {{ request()->routeIs('role.index') ? 'active' : '' }}" href="{{ route('role.index') }}" style="{{ request()->routeIs('role.index') ? 'color: green;' : '' }}">{{ __('globle.role') }}</a></li>
+                         </ul>
+                     </li>
+                      @endcan
 
-                      <li class="nav-item dropdown w-100 w-lg-auto">
-                         <a class="nav-link " href="{{ route('page.sale') }}">Sale</a>
-                      </li>
-                     
-                   </ul>
+                      @can('productList')
+                     <li class="nav-item dropdown w-100 w-lg-auto">
+                         <a class="nav-link dropdown-toggle {{ request()->routeIs('book.index') || request()->routeIs('genres.index') || request()->routeIs('author.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('book.index') || request()->routeIs('genres.index') || request()->routeIs('author.index')) ? 'color: green;' : '' }}">{{ __('globle.product') }}</a>
+                         <ul class="dropdown-menu">
+                             <li><a class="dropdown-item {{ request()->routeIs('book.index') ? 'active' : '' }}" href="{{ route('book.index') }}" style="{{ request()->routeIs('book.index') ? 'color: green;' : '' }}">{{ __('globle.book') }}</a></li>
+                             <li><a class="dropdown-item {{ request()->routeIs('genres.index') ? 'active' : '' }}" href="{{ route('genres.index') }}" style="{{ request()->routeIs('genres.index') ? 'color: green;' : '' }}">{{ __('globle.genres') }}</a></li>
+                             <li><a class="dropdown-item {{ request()->routeIs('author.index') ? 'active' : '' }}" href="{{ route('author.index') }}" style="{{ request()->routeIs('author.index') ? 'color: green;' : '' }}">{{ __('globle.authors') }}</a></li>
+                         </ul>
+                     </li>
+                     @endcan
+                 
+                     @can('inventoryList')
+                     <li class="nav-item dropdown w-100 w-lg-auto">
+                         <a class="nav-link dropdown-toggle {{ request()->routeIs('stock.index') || request()->routeIs('supplier.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('stock.index') || request()->routeIs('supplier.index')) ? 'color: green;' : '' }}">{{ __('globle.inventory') }}</a>
+                         <ul class="dropdown-menu">
+                             <li><a class="dropdown-item {{ request()->routeIs('stock.index') ? 'active' : '' }}" href="{{ route('stock.index') }}" style="{{ request()->routeIs('stock.index') ? 'color: green;' : '' }}">{{ __('globle.stock') }}</a></li>
+                             <li><a class="dropdown-item {{ request()->routeIs('supplier.index') ? 'active' : '' }}" href="{{ route('supplier.index') }}" style="{{ request()->routeIs('supplier.index') ? 'color: green;' : '' }}">{{ __('globle.supplier') }}</a></li>
+                         </ul>
+                     </li>
+                     @endcan
+                 
+                     <li class="nav-item dropdown w-100 w-lg-auto">
+                         <a class="nav-link {{ request()->routeIs('page.sale') ? 'active' : '' }}" href="{{ route('page.sale') }}" style="{{ request()->routeIs('page.sale') ? 'color: green;' : '' }}">{{ __('globle.sale') }}</a>
+                     </li>
+                 
+                     @can('reportSaleList')
+                     <li class="nav-item dropdown w-100 w-lg-auto">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('reports.sales') || request()->routeIs('reports.employeeSales') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('reports.sales') || request()->routeIs('reports.employeeSales')) ? 'color: green;' : '' }}">{{ __('globle.report') }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item {{ request()->routeIs('reports.sales') ? 'active' : '' }}" href="{{ route('reports.sales') }}" style="{{ request()->routeIs('reports.sales') ? 'color: green;' : '' }}">{{ __('globle.salereport') }}</a></li>
+                            <li><a class="dropdown-item {{ request()->routeIs('reports.employeeSales') ? 'active' : '' }}" href="{{ route('reports.employeeSales') }}" style="{{ request()->routeIs('reports.employeeSales') ? 'color: green;' : '' }}">{{ __('globle.cashreport') }}</a></li>
+                        </ul>
+                    </li>
+                     @endcan
+                 </ul>
+                 
                 </div>
              </div>
           </div>

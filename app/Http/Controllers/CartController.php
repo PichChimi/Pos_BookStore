@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Models\Book;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use Illuminate\Support\Facades\Auth;
 
 
 class CartController extends Controller
@@ -147,61 +148,113 @@ class CartController extends Controller
                 }
 
 
+                // public function pay(Request $request)
+                // {
+                //     try {
+                //         // Start database transaction
+                //         DB::beginTransaction();
+                
+                //         // Fetch all cart items
+                //         $cartItems = Cart::all();
+                
+                //         if ($cartItems->isEmpty()) {
+                //             return response()->json(['error' => 'Cart is empty.'], 400);
+                //         }
+                
+                //         // Calculate totals
+                //         $subtotal = $cartItems->sum('total');
+                
+                //         // Create Sale record
+                //         $sale = Sale::create([
+                //             'customers_id' => 1, // Replace with actual customer ID
+                //             'employee_id' => 1,  // Replace with actual employee ID
+                //             'sub_total' => $subtotal,
+                //             'total' => $subtotal,
+                //         ]);
+                
+                //         // Create SaleDetail records and adjust stock
+                //         foreach ($cartItems as $cartItem) {
+                //             $stock = Stock::where('book_id', $cartItem->book_id)->first();
+                
+                //             if (!$stock || $stock->quantity < $cartItem->quantity) {
+                //                 DB::rollBack();
+                //                 return response()->json(['error' => 'Insufficient stock for book ID ' . $cartItem->book_id], 400);
+                //             }
+                
+                //             SaleDetail::create([
+                //                 'sale_id' => $sale->id,
+                //                 'book_id' => $cartItem->book_id,
+                //                 'quantity' => $cartItem->quantity,
+                //                 'unit_price' => $stock->selling_price,
+                //                 'total' => $cartItem->total,
+                //             ]);
+                
+                //             $stock->quantity -= $cartItem->quantity;
+                //             $stock->save();
+                //         }
+                
+                //         // Clear the cart
+                //         Cart::truncate();
+                
+                //         // Commit the transaction
+                //         DB::commit();
+                
+                //         return response()->json(['message' => 'Payment successful.']);
+                //     } catch (\Exception $e) {
+                //         DB::rollBack();
+                //         return response()->json(['error' => 'Payment failed: ' . $e->getMessage()], 500);
+                //     }
+                // }
+
                 public function pay(Request $request)
                 {
                     try {
-                        // Start database transaction
                         DB::beginTransaction();
-                
-                        // Fetch all cart items
-                        $cartItems = Cart::all();
-                
+
+                        // Fetch cart items
+                        $cartItems = Cart::with('book')->get();
                         if ($cartItems->isEmpty()) {
-                            return response()->json(['error' => 'Cart is empty.'], 400);
+                            return response()->json(['error' => 'Your cart is empty.'], 400);
                         }
-                
-                        // Calculate totals
-                        $subtotal = $cartItems->sum('total');
-                
-                        // Create Sale record
+
+                        // Create a sale record
                         $sale = Sale::create([
                             'customers_id' => 1, // Replace with actual customer ID
-                            'employee_id' => 1,  // Replace with actual employee ID
-                            'sub_total' => $subtotal,
-                            'total' => $subtotal,
+                            'employee_id' => Auth::user()->id,
+                            'sub_total' => $cartItems->sum('total'),
+                            'total' => $cartItems->sum('total'),
                         ]);
-                
-                        // Create SaleDetail records and adjust stock
+
+                        // Add details to SaleDetailTbl and update stock
                         foreach ($cartItems as $cartItem) {
                             $stock = Stock::where('book_id', $cartItem->book_id)->first();
-                
-                            if (!$stock || $stock->quantity < $cartItem->quantity) {
-                                DB::rollBack();
-                                return response()->json(['error' => 'Insufficient stock for book ID ' . $cartItem->book_id], 400);
+                            if ($stock && $stock->quantity >= $cartItem->quantity) {
+                                $stock->decrement('quantity', $cartItem->quantity);
+
+                                SaleDetail::create([
+                                    'sale_id' => $sale->id,
+                                    'book_id' => $cartItem->book_id,
+                                    'quantity' => $cartItem->quantity,
+                                    'unit_price' => $stock->selling_price,
+                                    'total' => $cartItem->total,
+                                ]);
+                            } else {
+                                return response()->json(['errorstock' => 'Not enough stock for ' . $cartItem->book->title_en], 400);
                             }
-                
-                            SaleDetail::create([
-                                'sale_id' => $sale->id,
-                                'book_id' => $cartItem->book_id,
-                                'quantity' => $cartItem->quantity,
-                                'unit_price' => $stock->selling_price,
-                                'total' => $cartItem->total,
-                            ]);
-                
-                            $stock->quantity -= $cartItem->quantity;
-                            $stock->save();
                         }
-                
+
                         // Clear the cart
                         Cart::truncate();
-                
-                        // Commit the transaction
+
                         DB::commit();
-                
-                        return response()->json(['message' => 'Payment successful.']);
+
+                        // Generate invoice HTML
+                        $invoiceHtml = view('partials.invoice', compact('sale', 'cartItems'))->render();
+
+                        return response()->json(['message' => 'Payment successful!', 'invoiceHtml' => $invoiceHtml]);
                     } catch (\Exception $e) {
                         DB::rollBack();
-                        return response()->json(['error' => 'Payment failed: ' . $e->getMessage()], 500);
+                        return response()->json(['error' => $e->getMessage()], 500);
                     }
                 }
                 

@@ -77,7 +77,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $genres->id }}</td>
+                                    <td>{{ $loop->index + 1 }}</td>
 
                                     <td data-name-en="{{ $genres->name_en }}" data-name-kh="{{ $genres->name_kh }}">
                                        {{ $genres->{'name_' . app()->getLocale()} }}
