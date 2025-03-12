@@ -1,4 +1,4 @@
-<div class="border-bottom">
+<div class="border-bottom shadow">
     <div class="bg-light py-1">
        <div class="container">
           <div class="row">
@@ -188,6 +188,7 @@
                                         <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt="Default Profile" class="avatar avatar-md rounded-circle" />
                                     @endif
                                 </a>
+                                <p class="mt-1">{{ Auth::user()->name }}</p>
 
                                  <div class="dropdown-menu dropdown-menu-end p-0">
                                     <div class="lh-1 px-5 py-4 border-bottom">
@@ -302,10 +303,11 @@
                  
                      @can('systemList')
                      <li class="nav-item dropdown w-100 w-lg-auto">
-                         <a class="nav-link dropdown-toggle {{ request()->routeIs('user.index') || request()->routeIs('role.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('user.index') || request()->routeIs('role.index')) ? 'color: green;' : '' }}">{{ __('globle.system') }}</a>
+                         <a class="nav-link dropdown-toggle {{ request()->routeIs('user.index') || request()->routeIs('role.index') || request()->routeIs('user.activity_logs') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="{{ (request()->routeIs('user.index') || request()->routeIs('role.index')) ? 'color: green;' : '' }}">{{ __('globle.system') }}</a>
                          <ul class="dropdown-menu">
                              <li><a class="dropdown-item {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}" style="{{ request()->routeIs('user.index') ? 'color: green;' : '' }}">{{ __('globle.user') }}</a></li>
                              <li><a class="dropdown-item {{ request()->routeIs('role.index') ? 'active' : '' }}" href="{{ route('role.index') }}" style="{{ request()->routeIs('role.index') ? 'color: green;' : '' }}">{{ __('globle.role') }}</a></li>
+                             <li><a class="dropdown-item {{ request()->routeIs('role.index') ? 'active' : '' }}" href="{{ route('user.activity_logs') }}" style="{{ request()->routeIs('user.activity_logs') ? 'color: green;' : '' }}">User Activity Logs</a></li>
                          </ul>
                      </li>
                       @endcan
@@ -350,5 +352,8 @@
              </div>
           </div>
        </div>
+
     </nav>
  </div>
+
+ {{-- <div class="nav-shadow"></div> --}}

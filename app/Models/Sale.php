@@ -15,12 +15,15 @@ class Sale extends Model
         'customers_id',
         'employee_id',
         'sub_total',
-        'total'
+        'total',
+        'coupon',
+        'recived_amount',
+        'change_return'
     ];
 
     public function details():HasMany
     {
-        return $this->hasMany(SaleDetail::class);
+        return $this->hasMany(SaleDetail::class, 'sale_id');
     }
 
     public function employee()

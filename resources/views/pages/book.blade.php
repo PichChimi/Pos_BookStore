@@ -15,12 +15,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Book</h2>
+                  <h2>{{ __('globle.book') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Book</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addbook') }}</a>
                </div>
             </div>
          </div>
@@ -33,16 +33,28 @@
                   <div class="row justify-content-between">
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
-                        <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
-                        </form>
+                         {{-- --------- Not Reload Page --------- --}}
+                           <form class="d-flex" role="search">
+                              <input class="form-control" type="search" name="search" id="book-search"
+                                    placeholder="{{ __('globle.searchbook') }}"  aria-label="Search" />
+                           </form>
+                          {{-- --------- End Not Reload Page ------- --}}
+
+                        {{-- ----- Static ----- --}}
+                        {{-- <form class="d-flex" role="search" method="GET" action="{{ route('book.index') }}">
+                           <input class="form-control" type="search" name="search" placeholder="{{ __('globle.searchbook') }}" 
+                                  value="{{ request('search') }}" aria-label="Search" />
+                           <button class="btn btn-primary ms-2" type="submit">Search</button>
+                       </form> --}}
+                       {{-- ----- end Static ----- --}}
+                      
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -50,82 +62,9 @@
                <!-- card body -->
                <div class="card-body p-0">
                   <!-- table -->
-                  <div class="table-responsive">
-                     <table id="dataTable" class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
-                        <thead class="bg-light">
-                           <tr>
-                              <th>
-                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkAll" />
-                                    <label class="form-check-label" for="checkAll"></label>
-                                 </div>
-
-                              </th>
-                              <th>No</th>
-                              <th>Cover Book</th>
-                              <th>Title</th>
-                              <th>Qty</th>
-                              <th>Price</th>
-                              <th>Genres</th>
-                              <th></th>
-                           </tr>
-                        </thead>
-                        <tbody>
-
-                           @foreach ($books as $book)
-                               @foreach ($book->stocks as $stock)
-                                 <tr>
-                                    <td>
-                                       <div class="form-check">
-                                          <input class="form-check-input select-checkbox" type="checkbox" value="{{ $book->id }}" id="role_{{ $book->id }}" />
-                                          <label class="form-check-label" for="role_{{ $book->id }}"></label>
-
-                                       </div>
-                                    </td>
-                              
-                                    {{-- <td>{{ $book->id }}</td> --}}
-                                    <td>{{ $loop->parent->iteration }}</td>
-                                    <td>
-                                       <a href="#!"><img src="{{ Storage::url($book->cover_book) }}" alt="" class="icon-shape icon-md" /></a>
-                                    </td>
-
-                                    <td data-title-en="{{ $book->title_en }}" data-title-kh="{{ $book->title_en }}">
-                                       {{ $book->{'title_' . app()->getLocale()} }}
-                                    </td>
-
-                                   <td>{{ $stock->quantity }}</td>
-                                   <td>${{ $stock->selling_price }}</td>
-                                   <td data-genres-id="{{ $book->genres_id }}">{{ $book->genres ? $book->genres->{'name_' . app()->getLocale()} : 'No Genres Assigned' }}</td>
-
-
-                                    <td>
-                                       <div class="dropdown">
-                                          <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                             <i class="feather-icon icon-more-vertical fs-5"></i>
-                                          </a>
-                                          <ul class="dropdown-menu">
-                                             <li>
-                                                <a class="dropdown-item btnDelete" href="#">
-                                                   <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
-                                                </a>
-                                             </li>
-                                             <li>
-                                                <a class="dropdown-item btnEdit" href="#" data-id="{{ $book->id }}">
-                                                   <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
-                                                </a>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </td>
-                                 </tr>
-                              @endforeach
-                           @endforeach
-
-                        </tbody>
-                     </table>
-                  </div>
+                  <div id="book-list">
+                     @include('partials.book-list', ['books' => $books])
+                 </div>
                </div>
 
                <!-- Modal Insert-->
@@ -143,12 +82,12 @@
                                       <div class="col-lg-6">
 
                                           <div class="mb-3">
-                                              <label for="title_en" class="form-label">Title English</label>
+                                              <label for="title_en" class="form-label">{{ __('globle.titlen') }}</label>
                                               <input type="text" class="form-control" id="title_en" name="title_en">
                                           </div>
 
                                           <div class="mb-3">
-                                             <label class="form-label">Authore</label>
+                                             <label class="form-label">{{ __('globle.authors') }}</label>
                                              <select class="form-select" id="authors_id" name="authors_id">
                                                  @foreach($authorses as $authors)
                                                  <option value="{{ $authors->id }}">{{ $authors->name_en }}</option>
@@ -156,7 +95,7 @@
                                              </select>
                                          </div>
 
-                                         <label class="form-label">Cover Book</label>
+                                         <label class="form-label">{{ __('globle.coverbook') }}</label>
                                           <div class="mb-4 d-flex">
                                              <div class="position-relative">
                                                    <img class="image icon-shape icon-xxxl bg-light rounded-4" src="../assets/images/icons/book-closed.svg" alt="Image" />
@@ -176,12 +115,12 @@
                                       <div class="col-lg-6">
 
                                           <div class="mb-3">
-                                              <label for="title_kh" class="form-label">Title Khmer</label>
+                                              <label for="title_kh" class="form-label">{{ __('globle.titlekh') }}</label>
                                               <input type="text" class="form-control" id="title_kh" name="title_kh">
                                           </div>
 
                                           <div class="mb-3">
-                                             <label class="form-label">Genres</label>
+                                             <label class="form-label">{{ __('globle.genres') }}</label>
                                              <select class="form-select" id="genres_id" name="genres_id">
                                                  @foreach($genreses as $genres)
                                                  <option value="{{ $genres->id }}">{{ $genres->name_en }}</option>
@@ -204,7 +143,7 @@
                                   </div>
    
                                   <!-- Dynamic Save/Update Button -->
-                                  <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+                                  <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
                               </form>
                           </div>
                       </div>
@@ -216,6 +155,21 @@
          <script>
 
              $(document).ready(function(){
+
+            // --------- function Search -------- 
+                  $('#book-search').on('keyup', function () {
+                     let search = $(this).val();
+                     let formattedSearch = search.charAt(0).toUpperCase() + search.slice(1).toLowerCase();
+
+                  $.ajax({
+                     url: "{{ route('book.index') }}", // Make sure this matches your route
+                     method: "GET",
+                     data: { search: formattedSearch },
+                     success: function (data) {
+                        $('#book-list').html(data); // Update book list
+                     }
+                  });
+              });
 
             //  =========== Use Option =========
 
@@ -256,8 +210,15 @@
                               ids: selectedIds
                            },
                            success: function(response) {
-                              // alert('Selected roles have been deleted successfully.');
-                              location.reload(); // Reload the page to reflect changes
+                                 Swal.fire({
+                                       icon: 'success',
+                                       title: 'Success!',
+                                       text: 'Book has been deleted successfully.',
+                                       timer: 2000, // Modal will auto-close after 2 seconds
+                                       showConfirmButton: false // Hides the "OK" button
+                                 }).then(() => {
+                                       location.reload(); // Reload the page after the modal closes
+                                 });
                            },
                            error: function(xhr) {
                               alert('Error occurred while deleting roles.');
@@ -300,8 +261,16 @@
                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
-                           $('#modalForm').modal('hide'); // Hide modal
-                           location.reload(); // Reload the page to see changes
+                           $('#modalForm').modal('hide');
+                           Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Stock has been inserted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                              });
                         },
                         error: function(xhr) {
                            console.error('Error:', xhr.responseText); // Log error response
@@ -340,8 +309,7 @@
                         $('#modalForm').modal('show');
                      });
 
-                 
-
+               
                   // Delete
                   $('#dataTable').on('click', '.btnDelete',function(){
                     var current_row = $(this).closest('tr');
@@ -356,9 +324,15 @@
                                 id: id,
                             },
                             success: function(response) {
-                                    // alert('Data Delete successfully!');
-                                    // window.location.href = "{{ route('user.index') }}";
-                                    location.reload();
+                                  Swal.fire({
+                                          icon: 'success',
+                                          title: 'Success!',
+                                          text: 'Book has been inserted successfully.',
+                                          timer: 2000, // Modal will auto-close after 2 seconds
+                                          showConfirmButton: false // Hides the "OK" button
+                                    }).then(() => {
+                                          location.reload(); // Reload the page after the modal closes
+                                    });
                             },
                             error: function(response) {
                                 alert('Error occurred!');

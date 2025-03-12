@@ -7,7 +7,7 @@
 @foreach($books as $book)
 @foreach($book->stocks as $stock)
 <div class="col">
-    <div class="card card-product">
+    <div class="card shadow card-product">
         <div class="card-body">
             <div class="text-center position-relative" style="cursor: pointer">
                 <div class="position-absolute top-0 start-0">

@@ -1,5 +1,12 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
+.nav-shadow {
+    background: url(../images/banner/nav-shadow.png) repeat-x top;
+    width: 100%;
+    position: absolute;
+    bottom: 487px;
+    height: 6px;
+}
 .text-inherit {
     color: var(--fc-gray-800);
 }

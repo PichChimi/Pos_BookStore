@@ -99,7 +99,7 @@
                     <th>Item</th>
                     <th>Price</th>
                     <th>Qty</th>
-                    <th>Amount</th>
+                    {{-- <th>Amount</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -108,17 +108,18 @@
                     <td>{{ $cartItem->book->title_en }}</td>
                     <td>{{ number_format($cartItem->stock->selling_price, 2) }} $</td>
                     <td>{{ $cartItem->quantity }}</td>
-                    <td>{{ number_format($cartItem->total, 2) }} $</td>
+                    {{-- <td>{{ number_format($cartItem->total, 2) }} $</td> --}}
                 </tr>
                 @endforeach
             </tbody>
         </table>
 
         <div class="totals">
+            <p><strong>Subtotal:</strong> {{ number_format($sale->sub_total, 2) }} $</p>
             <p><strong>Total:</strong> {{ number_format($sale->total, 2) }} $</p>
-            <p><strong>USD Equivalent:</strong> ${{ number_format($sale->total / 4000, 2) }}</p>
-            <p><strong>Paid Payment:</strong> 0</p>
-            <p><strong>Change Return:</strong> 0</p>
+            <p><strong>Coupon:</strong> {{ number_format($sale->coupon, 2) }} $</p>
+            {{-- <p><strong>Recived Amount:</strong> {{ number_format($sale->recived_amount, 2) }} $</p> --}}
+            <p><strong>Change Return:</strong> {{ number_format($sale->change_return, 2) }} $</p>
         </div>
 
         <div class="footer">
@@ -130,6 +131,5 @@
         <button id="print-invoice" class="btn-print">Print Invoice</button>
     </div>
 
-   
 </body>
 </html>

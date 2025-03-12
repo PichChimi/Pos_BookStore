@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Providers;
-
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+      
     ];
 
     /**
@@ -40,5 +39,6 @@ class AuthServiceProvider extends ServiceProvider
          Gate::define('reportSaleList', function ($user) {
             return $user->role && strtolower($user->role->name_en) === 'admin';
          });
+      
     }
 }

@@ -438,91 +438,131 @@
      <main>
         <section class="mt-8">
            <div class="container mt-5">
-              <div class="hero-slider">
-                   <!-- table -->
+              
+            <div class="table-responsive-xl mb-6 mb-lg-0">
+               <div class="row flex-nowrap pb-3 pb-lg-0">
 
-        <div class="table-responsive-xl mb-6 mb-lg-0">
-         <div class="row flex-nowrap pb-3 pb-lg-0">
-
-            <div class="col-lg-4 col-12 mb-6">
-               <!-- card -->
-               <div class="card h-100 card-lg">
-                  <!-- card body -->
-                  <div class="card-body p-6">
-                     <!-- heading -->
-                     <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div>
-                           <h4 class="mb-0 fs-5">{{ __('globle.totalbook') }}</h4>
+                  <div class="col-lg-4 col-12 mb-6">
+                     <!-- card -->
+                     <div class="card h-100 card-lg">
+                        <!-- card body -->
+                        <div class="card-body p-6">
+                           <!-- heading -->
+                           <div class="d-flex justify-content-between align-items-center mb-6">
+                              <div>
+                                 <h4 class="mb-0 fs-5">{{ __('globle.totalbook') }}</h4>
+                              </div>
+                              <div class="icon-shape icon-md bg-light-danger text-dark-danger rounded-circle">
+                                 <i class="bi bi-book fs-5"></i>
+                              </div>
+                           </div>
+                           <!-- project number -->
+                           <div class="lh-1">
+                              <h1 class="mb-2 fw-bold fs-2">{{ $bookcount }}</h1>
+                              <span><a href="{{ route('book.index') }}">{{ __('globle.viewbook') }}</a></span>
+                           </div>
                         </div>
-                        <div class="icon-shape icon-md bg-light-danger text-dark-danger rounded-circle">
-                           <i class="bi bi-book fs-5"></i>
-                        </div>
-                     </div>
-                     <!-- project number -->
-                     <div class="lh-1">
-                        <h1 class="mb-2 fw-bold fs-2">{{ $bookcount }}</h1>
-                        <span><a href="{{ route('book.index') }}">{{ __('globle.viewbook') }}</a></span>
                      </div>
                   </div>
-               </div>
-            </div>
 
-            <div class="col-lg-4 col-12 mb-6">
-               <!-- card -->
-               <div class="card h-100 card-lg">
-                  <!-- card body -->
-                  <div class="card-body p-6">
-                     <!-- heading -->
-                     <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div>
-                           <h4 class="mb-0 fs-5">{{ __('globle.totasale') }}</h4>
+                  <div class="col-lg-4 col-12 mb-6">
+                     <!-- card -->
+                     <div class="card h-100 card-lg">
+                        <!-- card body -->
+                        <div class="card-body p-6">
+                           <!-- heading -->
+                           <div class="d-flex justify-content-between align-items-center mb-6">
+                              <div>
+                                 <h4 class="mb-0 fs-5">{{ __('globle.totasale') }}</h4>
+                              </div>
+                              <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
+                                 <i class="bi bi-cart fs-5"></i>
+                              </div>
+                           </div>
+                           <!-- project number -->
+                           <div class="lh-1">
+                              <h1 class="mb-2 fw-bold fs-2">{{ $saleDetailCount }}</h1>
+                              <span><a href="{{ route('reports.sales') }}">{{ __('globle.viewsale') }}</a></span>
+                           </div>
                         </div>
-                        <div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
-                           <i class="bi bi-cart fs-5"></i>
-                        </div>
-                     </div>
-                     <!-- project number -->
-                     <div class="lh-1">
-                        <h1 class="mb-2 fw-bold fs-2">{{ $saleDetailCount }}</h1>
-                        <span><a href="{{ route('reports.sales') }}">{{ __('globle.viewsale') }}</a></span>
                      </div>
                   </div>
-               </div>
-            </div>
-            
-            <div class="col-lg-4 col-12 mb-6">
-               <!-- card -->
-               <div class="card h-100 card-lg">
-                  <!-- card body -->
-                  <div class="card-body p-6">
-                     <!-- heading -->
-                     <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div>
-                           <h4 class="mb-0 fs-5">{{ __('globle.totaluser') }}</h4>
+                  
+                  <div class="col-lg-4 col-12 mb-6">
+                     <!-- card -->
+                     <div class="card h-100 card-lg">
+                        <!-- card body -->
+                        <div class="card-body p-6">
+                           <!-- heading -->
+                           <div class="d-flex justify-content-between align-items-center mb-6">
+                              <div>
+                                 <h4 class="mb-0 fs-5">{{ __('globle.totaluser') }}</h4>
+                              </div>
+                              <div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
+                                 <i class="bi bi-people fs-5"></i>
+                              </div>
+                           </div>
+                           <!-- project number -->
+                           <div class="lh-1">
+                              <h1 class="mb-2 fw-bold fs-2">{{ $usercount }}</h1>
+                              <span><a href="{{ route('user.index') }}">{{ __('globle.viewuser') }}</a></span>
+                           </div>
                         </div>
-                        <div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
-                           <i class="bi bi-people fs-5"></i>
-                        </div>
-                     </div>
-                     <!-- project number -->
-                     <div class="lh-1">
-                        <h1 class="mb-2 fw-bold fs-2">{{ $usercount }}</h1>
-                        <span><a href="{{ route('user.index') }}">{{ __('globle.viewuser') }}</a></span>
                      </div>
                   </div>
-               </div>
-            </div>
-         </div>
-      </div>
+           </div>
 
               </div>
-           </div>
+
+               <!-- Revenue Chart Card -->
+               <div class="card shadow card-lg p-4 mb-13 mt-5">
+                  <h4 class="text-center mb-4">Daily Revenue Report</h4>
+                  <canvas id="revenueChart"></canvas>
+            </div>
+
+          </div>
         </section>
 
-     
-       
+        <!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($days), // Date Labels
+                datasets: [{
+                    label: 'Daily Revenue ($)',
+                    data: @json($revenues), // Revenue Data
+                    borderColor: 'green',
+                    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'green'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category', // Display as categories (Dates)
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value; // Format Y-axis as Currency
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+   
      </main>
 
-     
-   
 @endsection

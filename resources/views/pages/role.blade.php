@@ -79,7 +79,7 @@
                               
                                     {{-- <td>{{ $role->id }}</td> --}}
                                     
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $role->id }}</td>
                                     <td data-name-en="{{ $role->name_en }}" data-name-kh="{{ $role->name_kh }}">
                                        {{ $role->{'name_' . app()->getLocale()} }}
                                     </td>
@@ -93,13 +93,13 @@
                                              <li>
                                                 <a class="dropdown-item btnDelete" href="#">
                                                    <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">{{ __('globle.') }}</span>
+                                                   <span class="text-danger">{{ __('globle.delete') }}</span>
                                                 </a>
                                              </li>
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#">
                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                   {{ __('globle.') }}
+                                                   {{ __('globle.edit') }}
                                                 </a>
                                              </li>
                                           </ul>
@@ -127,17 +127,17 @@
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_en" class="form-label">Name English</label>
+                        <label for="name_en" class="form-label">{{ __('globle.namen') }}</label>
                         <input type="text" class="form-control" id="name_en" >
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_kh" class="form-label">Name Khmer</label>
+                        <label for="name_kh" class="form-label">{{ __('globle.namekh') }}</label>
                         <input type="text" class="form-control" id="name_kh" >
                         </div>
 
-                        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
-                        <a href="#" id="btnUpdate" class="btn btn-primary">Update</a>
+                        <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
+                        <a href="#" id="btnUpdate" class="btn btn-primary">{{ __('globle.edit') }}</a>
                      
                   </form>
 

@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <div class="row mb-3">
-        <div class="col-md-12">
+        <div class="col-md-12 mt-4">
             <h2>Sales Report</h2>
         </div>
     </div>

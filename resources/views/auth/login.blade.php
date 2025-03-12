@@ -16,7 +16,7 @@
              <div class="col-12 col-md-6 offset-lg-1 col-lg-4 order-lg-2 order-1">
                 <div class="mb-lg-9 mb-5">
                    <h1 class="mb-1 h2 fw-bold">Sign in to FreshCart</h1>
-                   <p>Welcome back to FreshCart! Enter your email to get started.</p>
+                   {{-- <p>Welcome back to FreshCart! Enter your email to get started.</p> --}}
                 </div>
 
                 <form class="needs-validation" method="POST" action="{{ route('login') }}" novalidate>
@@ -53,7 +53,7 @@
                          </div>
                       </div>
 
-                      <div class="d-flex justify-content-between">
+                      {{-- <div class="d-flex justify-content-between">
                          <!-- form check -->
                          <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
@@ -64,7 +64,7 @@
                             Forgot password?
                             <a href="forgot-password.html">Reset It</a>
                          </div>
-                      </div>
+                      </div> --}}
                       <!-- btn -->
                       <div class="col-12 d-grid">
                         {{-- <button type="submit" class="btn btn-primary">Sign In</button> --}}
@@ -72,18 +72,18 @@
                             Sign In
                         </button>
 
-                        @if (Route::has('password.request'))
+                        {{-- @if (Route::has('password.request'))
                             <a class="btn btn-link" href="{{ route('password.request') }}">
                                 {{ __('Forgot Your Password?') }}
                             </a>
-                        @endif
+                        @endif --}}
                     </div>
 
                       <!-- link -->
-                      <div>
+                      {{-- <div>
                          Don’t have an account?
                          <a href="register">Sign Up</a>
-                      </div>
+                      </div> --}}
                    </div>
                 </form>
              </div>

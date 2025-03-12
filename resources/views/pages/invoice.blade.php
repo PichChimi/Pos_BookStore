@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<body>
+<body>      
     <div class="invoice">
         <h2>Invoice</h2>
         <p><strong>Sale ID:</strong> {{ $sale->id }}</p>

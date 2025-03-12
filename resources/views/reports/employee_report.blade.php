@@ -1,4 +1,4 @@
-<div class="mb-3">
+<div class="mb-7">
     <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
     <a href="{{ route('employeeSalesReport.export', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-success">Export to Excel</a>
 </div>
@@ -13,7 +13,7 @@
     <tbody>
         @forelse($sales as $sale)
         <tr>
-            <td>{{ $sale->employee->name ?? 'Unknown' }}</td> <!-- Assuming employee relation -->
+            <td>{{ $sale->employee_name ?? 'Unknown' }}</td> <!-- Assuming employee relation -->
             <td>${{ number_format($sale->total_sales, 2) }}</td>
             <td>{{ $sale->total_items }}</td>
         </tr>

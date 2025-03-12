@@ -67,34 +67,42 @@ public function getEmployeeSalesReport(Request $request)
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
 
-    $query = Sale::select(
-        'sales.employee_id',
-        DB::raw('SUM(DISTINCT sales.total) as total_sales'),
-        DB::raw('SUM(sale_details.quantity) as total_items')
-    )
-    ->leftJoin('sale_details', 'sales.id', '=', 'sale_details.sale_id')
-    ->groupBy('sales.employee_id');
+    // Query sales with related sale details and filter by date
+    $sales = Sale::with(['employee','details'])
+        ->when($startDate, fn($query) => $query->whereDate('sales.created_at', '>=', $startDate))
+        ->when($endDate, fn($query) => $query->whereDate('sales.created_at', '<=', $endDate))
+        ->get();
 
-    // Apply date filters
-    if ($startDate) {
-        $query->whereDate('sales.created_at', '>=', $startDate);
-    }
-    if ($endDate) {
-        $query->whereDate('sales.created_at', '<=', $endDate);
-    }
+    // Group sales by employee and calculate totals
+        $groupedSales = $sales->groupBy('employee_id')->map(function ($employeeSales, $employeeId) {
+        $totalSales = $employeeSales->sum('total');
+        $totalItems = $employeeSales->flatMap(fn($sale) => $sale->details)->sum('quantity');
 
-    $sales = $query->get();
-     // Calculate grand totals
-     $grandTotalSales = $sales->sum('total_sales');
-     $grandTotalItems = $sales->sum('total_items');
+        $employeeName = $employeeSales->first()->employee
+        ? $employeeSales->first()->employee->name
+        : 'Unknown';
+
+        return (object) [
+            'employee_name' => $employeeName,
+            'total_sales' => $totalSales,
+            'total_items' => $totalItems,
+        ];
+    });
+
+    // Convert grouped sales to a collection
+    $sales = $groupedSales->values();
+
+    // Calculate grand totals
+    $grandTotalSales = $sales->sum('total_sales');
+    $grandTotalItems = $sales->sum('total_items');
 
     if ($request->ajax()) {
         return response()->json([
-            'html' => view('reports.employee_report', compact('sales','grandTotalSales','grandTotalItems'))->render(),
+            'html' => view('reports.employee_report', compact('sales', 'grandTotalSales', 'grandTotalItems'))->render(),
         ]);
     }
 
-    return view('reports.employee_sales', compact('sales','grandTotalSales','grandTotalItems'));
+    return view('reports.employee_sales', compact('sales', 'grandTotalSales', 'grandTotalItems'));
 }
 
 public function exportEmployeeSalesReport(Request $request)

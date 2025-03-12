@@ -17,7 +17,6 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-
 Auth::routes();
 
 Route::get('/locale/{locale}',[LocalizationController::class, 'setLang'])->name('lang');
@@ -112,6 +111,9 @@ Route::group([
          Route::put('/update', [App\Http\Controllers\StockController::class, 'update'])->name('stock.update');
          Route::delete('/delete', [App\Http\Controllers\StockController::class, 'delete'])->name('stock.delete');
          Route::post('/delete-selected', [App\Http\Controllers\StockController::class, 'deleteSelected'])->name('stock.deleteSelected');
+         Route::get('/get-details', [App\Http\Controllers\StockController::class, 'getDetails']);
+         // Add quantity
+        Route::post('/add-quantity', [App\Http\Controllers\StockController::class, 'addQuantity']);
      });
 
      Route::group([
@@ -124,16 +126,19 @@ Route::group([
          Route::delete('/remove/{cartId}', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
          Route::post('/add-by-barcode', [App\Http\Controllers\CartController::class, 'addToCartByBarcode'])->name('cart.addByBarcode');
          Route::post('/pay', [App\Http\Controllers\CartController::class, 'pay'])->name('cart.pay');
-
+    
      });
 
-    //  Route::get('/reports/sales', [App\Http\Controllers\ReportController::class, 'salesReport'])->name('reports.sales');
-     
+    //  Route::get('/reports/sales', [App\Http\Contrors\ReportController::class, 'salesReport'])->name('reports.sales');
+     Route::get('/user-activity-logs', [App\Http\Controllers\UserActivityLogController::class, 'index'])->name('user.activity_logs');
+     Route::post('/delete-selected', [App\Http\Controllers\UserActivityLogController::class, 'deleteSelected'])->name('user_log.deleteSelected');
+
      Route::get('/reports/sales', [App\Http\Controllers\ReportController::class, 'salesReport'])->name('reports.sales');
      Route::get('sales/report/export', [App\Http\Controllers\ReportController::class, 'exportSalesReport'])->name('sales.report.export');
      Route::get('/reports/employee-sales', [App\Http\Controllers\ReportController::class, 'getEmployeeSalesReport'])->name('reports.employeeSales');
      Route::get('employee-sales-report/export', [App\Http\Controllers\ReportController::class, 'exportEmployeeSalesReport'])->name('employeeSalesReport.export');
-    
+    //  chart
+    //  Route::get('/revenue-report', [App\Http\Controllers\RevenueController::class, 'index'])->name('revenue.report');
     
  });
 

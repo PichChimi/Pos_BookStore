@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Sale;
 use App\Models\Book;
 use App\Models\Cart;
 use App\Models\Genres;
@@ -17,10 +19,27 @@ class PageController extends Controller
         $book = Book::count();
         $user = User::count();
         $saleDetail = SaleDetail::count();
+
+        $dailyRevenue = Sale::selectRaw("SUM(total) as revenue, TO_CHAR(created_at, 'YYYY-MM-DD') as day")
+        ->groupBy(DB::raw("TO_CHAR(created_at, 'YYYY-MM-DD')")) // Correct grouping
+        ->orderBy(DB::raw("TO_CHAR(created_at, 'YYYY-MM-DD')")) // Order correctly
+        ->get();
+
+        // Prepare data for Chart.js
+        $days = [];
+        $revenues = [];
+
+        foreach ($dailyRevenue as $data) {
+            $days[] = $data->day; // Store date string
+            $revenues[] = $data->revenue; // Store revenue
+        }
+
         return view('pages.home',[
             'bookcount' => $book,
             'usercount' => $user,
-            'saleDetailCount' => $saleDetail
+            'saleDetailCount' => $saleDetail,
+            'days' => $days,
+            'revenues' => $revenues
         ]);
     }
 

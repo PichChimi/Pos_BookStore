@@ -14,12 +14,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Genres</h2>
+                  <h2>{{ __('globle.genres') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Genres</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addgenres') }}</a>
                </div>
             </div>
          </div>
@@ -33,15 +33,20 @@
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
                         <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
+                           <input class="form-control" type="search" name="search" id="genres-search"
+                                 placeholder="{{ __('globle.searchgenres') }}"  aria-label="Search" />
                         </form>
+
+                        {{-- <form class="d-flex" role="search">
+                           <input class="form-control" type="search" placeholder="{{ __('globle.searchgenres') }}" aria-label="Search" />
+                        </form> --}}
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -49,67 +54,9 @@
                <!-- card body -->
                <div class="card-body p-0">
                   <!-- table -->
-                  <div class="table-responsive">
-                     <table id="dataTable" class="table table-centered table-hover mb-0 text-nowrap table-borderless table-with-checkbox">
-                        <thead class="bg-light">
-                           <tr>
-                              <th>
-                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkAll" />
-                                    <label class="form-check-label" for="checkAll"></label>
-                                 </div>
-
-                              </th>
-                              <th>No</th>
-                              <th>Name</th>
-                              <th>Action</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-
-                           @foreach ($genress as $genres)
-                                 <tr>
-                                    <td>
-                                       <div class="form-check">
-                                          <input class="form-check-input select-checkbox" type="checkbox" value="{{ $genres->id }}" id="role_{{ $genres->id }}" />
-                                          <label class="form-check-label" for="role_{{ $genres->id }}"></label>
-
-                                       </div>
-                                    </td>
-                              
-                                    <td>{{ $loop->index + 1 }}</td>
-
-                                    <td data-name-en="{{ $genres->name_en }}" data-name-kh="{{ $genres->name_kh }}">
-                                       {{ $genres->{'name_' . app()->getLocale()} }}
-                                    </td>
-
-                                    <td>
-                                       <div class="dropdown">
-                                          <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
-                                             <i class="feather-icon icon-more-vertical fs-5"></i>
-                                          </a>
-                                          <ul class="dropdown-menu">
-                                             <li>
-                                                <a class="dropdown-item btnDelete" href="#">
-                                                   <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
-                                                </a>
-                                             </li>
-                                             <li>
-                                                <a class="dropdown-item btnEdit" href="#">
-                                                   <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
-                                                </a>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </td>
-                                 </tr>
-                           @endforeach
-
-                        </tbody>
-                     </table>
-                  </div>
+                  <div id="genres-list">
+                     @include('partials.genres-list', ['genress' => $genress])
+                 </div>
                </div>
 
                <!-- Modal -->
@@ -126,17 +73,17 @@
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_en" class="form-label">Name English</label>
+                        <label for="name_en" class="form-label">{{ __('globle.namen') }}</label>
                         <input type="text" class="form-control" id="name_en" >
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_kh" class="form-label">Name Khmer</label>
+                        <label for="name_kh" class="form-label">{{ __('globle.namekh') }}</label>
                         <input type="text" class="form-control" id="name_kh" >
                         </div>
 
-                        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
-                        <a href="#" id="btnUpdate" class="btn btn-primary">Update</a>
+                        <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
+                        <a href="#" id="btnUpdate" class="btn btn-primary">{{ __('globle.edit') }}</a>
                      
                   </form>
 
@@ -149,6 +96,21 @@
          <script>
 
              $(document).ready(function(){
+
+                // --------- function Search -------- 
+                $('#genres-search').on('keyup', function () {
+                     let search = $(this).val();
+                     let formattedSearch = search.charAt(0).toUpperCase() + search.slice(1).toLowerCase();
+
+                  $.ajax({
+                     url: "{{ route('genres.index') }}", // Make sure this matches your route
+                     method: "GET",
+                     data: { search: formattedSearch },
+                     success: function (data) {
+                        $('#genres-list').html(data); // Update book list
+                     }
+                  });
+              });
 
             //  =========== Use Option =========
 
@@ -189,8 +151,15 @@
                               ids: selectedIds
                            },
                            success: function(response) {
-                              // alert('Selected roles have been deleted successfully.');
-                              location.reload(); // Reload the page to reflect changes
+                                  Swal.fire({
+                                          icon: 'success',
+                                          title: 'Success!',
+                                          text: 'Genres has been deleted successfully.',
+                                          timer: 2000, // Modal will auto-close after 2 seconds
+                                          showConfirmButton: false // Hides the "OK" button
+                                    }).then(() => {
+                                          location.reload(); // Reload the page after the modal closes
+                                    });
                            },
                            error: function(xhr) {
                               alert('Error occurred while deleting roles.');
@@ -226,11 +195,18 @@
                            name_kh: name_kh
                      },
                      success: function(response) {
-                              // alert('Data inserted successfully!');
-                              // window.location.href = "{{ route('genres.index') }}";
-                              location.reload();
-                              $('#name_en').val('');
-                              $('#name_kh').val('');
+                              $('#modalForm').modal('hide');
+                              Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Genres has been inserted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                              });
+                              // $('#name_en').val('');
+                              // $('#name_kh').val('');
                      },
                      error: function(response) {
                            alert('Error occurred!');
@@ -269,8 +245,16 @@
                                 name_kh: name_kh
                             },
                             success: function(response) {
-                                    // alert('Data updated successfully!');
-                                    location.reload();
+                              $('#modalForm').modal('hide');
+                                   Swal.fire({
+                                          icon: 'success',
+                                          title: 'Success!',
+                                          text: 'Genres has been updated successfully.',
+                                          timer: 2000, // Modal will auto-close after 2 seconds
+                                          showConfirmButton: false // Hides the "OK" button
+                                    }).then(() => {
+                                          location.reload(); // Reload the page after the modal closes
+                                    });
                             },
                             error: function(response) {
                                 alert('Error occurred!');
@@ -278,7 +262,7 @@
                         });
 
                     });
-                    $('#modalForm').modal('hide');
+                  //   $('#modalForm').modal('hide');
                     
                      
                   });
@@ -298,8 +282,15 @@
                                 id: id,
                             },
                             success: function(response) {
-                                    // alert('Data Delete successfully!');
-                                    location.reload();
+                                  Swal.fire({
+                                          icon: 'success',
+                                          title: 'Success!',
+                                          text: 'Genres has been deleted successfully.',
+                                          timer: 2000, // Modal will auto-close after 2 seconds
+                                          showConfirmButton: false // Hides the "OK" button
+                                    }).then(() => {
+                                          location.reload(); // Reload the page after the modal closes
+                                    });
                             },
                             error: function(response) {
                                 alert('Error occurred!');

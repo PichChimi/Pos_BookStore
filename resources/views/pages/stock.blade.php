@@ -14,12 +14,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Stock</h2>
+                  <h2>{{ __('globle.stock') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Stock</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addstock') }}</a>
                </div>
             </div>
          </div>
@@ -33,15 +33,15 @@
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
                         <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
+                           <input class="form-control" type="search" placeholder="{{ __('globle.searchstock') }}" aria-label="Search" />
                         </form>
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -60,13 +60,13 @@
                                  </div>
 
                               </th>
-                              <th>No</th>
-                              <th>Book</th>
-                              <th>Quantity</th>
-                              <th>Purchase Price</th>
-                              <th>Selling Price</th>
-                              <th>Supplier</th>
-                              <th>Action</th>
+                              <th>{{ __('globle.no') }}</th>
+                              <th>{{ __('globle.book') }}</th>
+                              <th>{{ __('globle.qty') }}</th>
+                              <th>{{ __('globle.const') }}</th>
+                              <th>{{ __('globle.price') }}</th>
+                              <th>{{ __('globle.supplier') }}</th>
+                              <th>{{ __('globle.action') }}</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -81,7 +81,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $stock->id }}</td>
                                     <td data-book-id="{{ $stock->book->id }}" data-name-en="{{ $stock->book->title_en }}" data-name-kh="{{ $stock->book->title_kh }}">
                                        {{ $stock->book->{'title_' . app()->getLocale()} }}
                                     </td>
@@ -89,9 +89,12 @@
                                     <td>{{ $stock->purchase_price }}</td>
                                     <td>{{ $stock->selling_price }}</td>
 
-                                    <td data-supplier-id="{{ $stock->supplier->id }}" data-supp-en="{{ $stock->supplier->name_en }}" data-supp-kh="{{ $stock->supplier->name_kh }}">
-                                       {{ $stock->supplier->{'name_' . app()->getLocale()} }}
-                                    </td>
+                                    <td 
+                                        data-supplier-id="{{ $stock->supplier?->id ?? 'N/A' }}" 
+                                        data-supp-en="{{ $stock->supplier?->name_en ?? 'N/A' }}" 
+                                        data-supp-kh="{{ $stock->supplier?->name_kh ?? 'N/A' }}">
+                                        {{ $stock->supplier?->{'name_' . app()->getLocale()} ?? 'No Supplier' }}
+                                   </td>
 
                                     <td>
                                        <div class="dropdown">
@@ -102,13 +105,13 @@
                                              <li>
                                                 <a class="dropdown-item btnDelete" href="#">
                                                    <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
+                                                   <span class="text-danger">{{ __('globle.delete') }}</span>
                                                 </a>
                                              </li>
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#">
                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
+                                                   {{ __('globle.edit') }}
                                                 </a>
                                              </li>
                                           </ul>
@@ -123,279 +126,307 @@
                </div>
 
                <!-- Modal -->
-         <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-body">
-                  
-                  <form id="formSave">
-                        
-                        <div class="mb-3">
-                        
-                        <input type="text" hidden class="form-control" id="id" >
-                        </div>
-
-                        <div class="row">
-
-                           <div class="col-lg-6">
-                              
-                              <div class="mb-3">
-                                 <label class="form-label">Book</label>
-                                 <select class="form-select" id="book_id" name="book_id">
-                                     @foreach($books as $book)
-                                     <option value="{{ $book->id }}">{{ $book->title_en }}</option>
-                                     @endforeach
-                                 </select>
-                             </div>
-
-
-                              <div class="mb-3">
-                                 <label for="purchase_price" class="form-label">Purchase Price</label>
-                                 <input type="text" class="form-control" id="purchase_price" >
-                              </div>
-
-                             
-
-                           </div>
-
-
-                           <div class="col-lg-6">
-
-                              <div class="mb-3">
-                                 <label for="quantity" class="form-label">Quantity</label>
-                                 <input type="number" class="form-control" id="quantity" name="quantity" >
-                             </div>
-                             
-
-                              <div class="mb-3">
-                                 <label for="selling_price" class="form-label">Selling Price</label>
-                                 <input type="text" class="form-control" id="selling_price" >
-                              </div>
-
-                             
-
-                           </div>
-
-                        </div>
-
-                        <div class="mb-3">
-                           <label class="form-label">Supplier</label>
-                           <select class="form-select" id="supplier_id" name="supplier_id">
-                               @foreach($suppliers as $supplier)
-                               <option value="{{ $supplier->id }}">{{ $supplier->name_en }}</option>
-                               @endforeach
-                           </select>
-                       </div>
-                        
-
-                        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
-                        <a href="#" id="btnUpdate" class="btn btn-primary">Update</a>
-                     
-                  </form>
-
-               </div>
-            </div>
-            </div>
-         </div>
+               <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-body">
+                              <form id="formSave">
+                                  <!-- Hidden Field for ID -->
+                                  <input type="hidden" class="form-control" id="id" name="id">
+              
+                                  <div class="row">
+                                      <!-- Book Dropdown -->
+                                      <div class="col-lg-6">
+                                          <div class="mb-3">
+                                              <label class="form-label">{{ __('globle.book') }}</label>
+                                              <select class="form-select" id="book_id" name="book_id" required>
+                                                  <option value="" selected disabled>Select Book</option>
+                                                  @foreach($books as $book)
+                                                  <option value="{{ $book->id }}">{{ $book->title_en }}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+              
+                                          <!-- Purchase Price -->
+                                          <div class="mb-3">
+                                              <label for="purchase_price" class="form-label">{{ __('globle.const') }}</label>
+                                              <input type="text" class="form-control" id="purchase_price" name="purchase_price" required>
+                                          </div>
+                                      </div>
+              
+                                      <!-- Quantity and Selling Price -->
+                                      <div class="col-lg-6">
+                                          <div class="mb-3">
+                                              <label for="quantity" class="form-label">{{ __('globle.qty') }}</label>
+                                              <input type="number" class="form-control" id="quantity" name="quantity" required>
+                                          </div>
+              
+                                          <div class="mb-3">
+                                              <label for="selling_price" class="form-label">{{ __('globle.price') }}</label>
+                                              <input type="text" class="form-control" id="selling_price" name="selling_price" required>
+                                          </div>
+                                      </div>
+                                  </div>
+              
+                                  <!-- Supplier Dropdown -->
+                                  <div class="mb-3">
+                                      <label class="form-label">{{ __('globle.supplier') }}</label>
+                                      <select class="form-select" id="supplier_id" name="supplier_id" required>
+                                          <option value="" selected disabled>Select Supplier</option>
+                                          @foreach($suppliers as $supplier)
+                                          <option value="{{ $supplier->id }}">{{ $supplier->name_en }}</option>
+                                          @endforeach
+                                      </select>
+                                  </div>
+              
+                                  <!-- Save and Update Buttons -->
+                                  <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
+                                  <button type="button" id="btnUpdate" class="btn btn-primary">{{ __('globle.edit') }}</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
          <!-- end Modal -->
-         <script>
+<script>
 
-             $(document).ready(function(){
+   $(document).ready(function(){
 
-            //  =========== Use Option =========
+      $(document).ready(function () {
+    // =========== Use Option =========
 
-               // Select or Deselect All Checkboxes
-               $('#checkAll').on('click', function() {
-                  $('.select-checkbox').prop('checked', this.checked);
-               });
+    // Select or Deselect All Checkboxes
+    $('#checkAll').on('click', function () {
+        $('.select-checkbox').prop('checked', this.checked);
+    });
 
-               // Handle select change event
-               $('#statusSelect').on('change', function() {
-                  var selectedOption = $(this).val();
+    // Handle select change event
+    $('#statusSelect').on('change', function () {
+        const selectedOption = $(this).val();
 
-                  if (selectedOption === 'deleteSelected') {
-                        // Get all selected checkboxes
-                        var selectedIds = [];
-                        $('.select-checkbox:checked').each(function() {
-                           selectedIds.push($(this).val());
-                        });
+        if (selectedOption === 'deleteSelected') {
+            const selectedIds = [];
+            $('.select-checkbox:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
 
-                        // If no checkbox is selected, alert the user
-                        if (selectedIds.length === 0) {
-                           alert('Please select at least one item to delete.');
-                           return;
-                        }
+            if (selectedIds.length === 0) {
+                alert('Please select at least one item to delete.');
+                return;
+            }
 
-                        // Confirm before deleting
-                        if (!confirm('Are you sure you want to delete the selected items?')) {
-                           $(this).val('Status'); // Reset the dropdown to default
-                           return;
-                        }
+            if (!confirm('Are you sure you want to delete the selected items?')) {
+                $(this).val('Status'); // Reset the dropdown
+                return;
+            }
 
-                        // Send an AJAX request to delete the selected roles
-                        $.ajax({
-                           url: "{{ route('stock.deleteSelected') }}", // Laravel route for deleting roles
-                           method: 'POST',
-                           data: {
-                              _token: "{{ csrf_token() }}",  // CSRF token
-                              ids: selectedIds
-                           },
-                           success: function(response) {
-                              // alert('Selected roles have been deleted successfully.');
-                              location.reload(); // Reload the page to reflect changes
-                           },
-                           error: function(xhr) {
-                              alert('Error occurred while deleting roles.');
-                           }
-                        });
-
-                        // Reset the dropdown to default after deletion
-                        $(this).val('Status'); // Reset the dropdown to default
-                  }
-               });
-
-
-               // -------------------
-                  
-                // Modal
-                $('#btnmodal').click(function(){
-                    $('#modalForm').modal('show');
-                    $('#btnUpdate').hide();
-                });
-
-                 //   Insert data
-                 $('#formSave').on('submit', function(e){
-                    e.preventDefault();
-                    var book_id = $('#book_id').val();
-                    var quantity = $('#quantity').val();
-                    var purchase_price = $('#purchase_price').val();
-                    var selling_price = $('#selling_price').val();
-                    var supplier_id = $('#supplier_id').val();
-                    
-
-                     $.ajax({
-                     url: "{{ route('stock.store') }}", // Your Laravel route to handle the form submission
-                     method: "POST",
-                     data: {
-                           _token: "{{ csrf_token() }}", // CSRF Token for security
-                              book_id: book_id,
-                              quantity: quantity,
-                              purchase_price: purchase_price,
-                              selling_price: selling_price,
-                              supplier_id: supplier_id,
-                     },
-                     success: function(response) {
-                              // alert('Data inserted successfully!');
-                              // window.location.href = "{{ route('author.index') }}";
-                              location.reload();
-
-                              $('#book_id').val('');
-                              $('#quantity').val('');
-                              $('#purchase_price').val('');
-                              $('#selling_price').val('');
-                              $('#supplier_id').val('');
-                     },
-                     error: function(response) {
-                           alert('Error occurred!');
-                     }
-                  });
-
-                 });
-                 //  end Store
-
-                  //  Edit
-                  $('#dataTable').on('click', '.btnEdit', function(){
-                     var current_row = $(this).closest('tr');
-                     var id = current_row.find('td').eq(1).text();
-                     var book_id = current_row.find('td').eq(2).data('book-id');
-                     // var title_en = current_row.find('td').eq(2).data('name-en'); 
-                     // var title_kh = current_row.find('td').eq(2).data('name-kh'); 
-                     var quantity = current_row.find('td').eq(3).text();
-                     var purchase_price = current_row.find('td').eq(4).text(); // Get 'name_kh' // Get 'name_kh'
-                     var selling_price = current_row.find('td').eq(5).text(); // Get 'name_kh' // Get 'name_kh'
-                     // var sname_en = current_row.find('td').eq(6).data('supp-en'); 
-                     // var sname_kh = current_row.find('td').eq(6).data('supp-kh');
-                     var supplier_id = current_row.find('td').eq(6).data('supplier-id');
-
-                     $('#id').val(id);
-                     $('#book_id').val(book_id);
-                     $('#quantity').val(quantity);
-                     $('#purchase_price').val(purchase_price);
-                     $('#selling_price').val(selling_price);
-                     $('#supplier_id').val(supplier_id);
-                    
-
-                    $('#modalForm').modal('show');
-                    $('#btnSave').hide();
-
-                    $('#btnUpdate').click(function(){
-                        var id = $('#id').val();
-                        var book_id = $('#book_id').val();
-                        var quantity = $('#quantity').val();
-                        var purchase_price = $('#purchase_price').val();
-                        var selling_price = $('#selling_price').val();
-                        var supplier_id = $('#supplier_id').val();
-                       
-
-                        $.ajax({
-                            url: "{{ route('stock.update') }}", // Your Laravel route to handle the form submission
-                            method: "PUT",
-                            data: {
-                                _token: "{{ csrf_token() }}", // CSRF Token for security
-                                id: id,
-                                book_id: book_id,
-                                quantity: quantity,
-                                purchase_price: purchase_price,
-                                selling_price: selling_price,
-                                supplier_id: supplier_id,
-                            },
-                            success: function(response) {
-                                    // alert('Data updated successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
-                            },
-                            error: function(response) {
-                                alert('Error occurred!');
-                            }
-                        });
-
+            $.ajax({
+                url: "{{ route('stock.deleteSelected') }}",
+                method: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    ids: selectedIds,
+                },
+                success: function (response) {
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Stock has been deleted successfully.',
+                        timer: 2000, // Modal will auto-close after 2 seconds
+                        showConfirmButton: false // Hides the "OK" button
+                    }).then(() => {
+                        location.reload(); // Reload the page after the modal closes
                     });
-                    $('#modalForm').modal('hide');
-                    
-                     
-                  });
-                  //  end Edit
+                },
+                error: function (xhr) {
+                    alert('Error occurred while deleting items.');
+                }
+            });
 
-                  // Delete
-                  $('#dataTable').on('click', '.btnDelete',function(){
-                    var current_row = $(this).closest('tr');
-                    var id = current_row.find('td').eq(1).text();
-                    var con = confirm("Are you sure to delete?");
-                    if(con == true){
-                        $.ajax({
-                            url: "{{ route('stock.delete') }}", // Your Laravel route to handle the form submission
-                            method: "Delete",
-                            data: {
-                                _token: "{{ csrf_token() }}", // CSRF Token for security
-                                id: id,
-                            },
-                            success: function(response) {
-                                    // alert('Data Delete successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
-                            },
-                            error: function(response) {
-                                alert('Error occurred!');
-                            }
-                        });
-                    }
+            $(this).val('Status'); // Reset dropdown
+        }
+    });
 
+    // Modal - Add Stock
+    $('#btnmodal').click(function () {
+        $('#modalForm').modal('show');
+        $('#btnUpdate').hide();
+        $('#btnSave').show();
+        $('#formSave')[0].reset();
+    });
+
+    // Insert Stock Data
+    $('#formSave').on('submit', function (e) {
+        e.preventDefault();
+
+        const formData = {
+            book_id: $('#book_id').val(),
+            quantity: $('#quantity').val(),
+            purchase_price: $('#purchase_price').val(),
+            selling_price: $('#selling_price').val(),
+            supplier_id: $('#supplier_id').val(),
+            _token: "{{ csrf_token() }}",
+        };
+
+        $.ajax({
+            url: "{{ route('stock.store') }}",
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                $('#modalForm').hide('show');
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Stock has been inserted successfully.',
+                    timer: 2000, // Modal will auto-close after 2 seconds
+                    showConfirmButton: false // Hides the "OK" button
+                }).then(() => {
+                    location.reload(); // Reload the page after the modal closes
                 });
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.responseJSON.message);
+            },
+        });
+    });
 
-              });
+    // Edit Stock Data
+    $('#dataTable').on('click', '.btnEdit', function () {
+    const currentRow = $(this).closest('tr');
+    
+    // Fill form inputs with existing data
+    $('#id').val(currentRow.find('td').eq(1).text());
+    $('#book_id').val(currentRow.find('td').eq(2).data('book-id'));
+    $('#quantity').val(currentRow.find('td').eq(3).text());
+    $('#purchase_price').val(currentRow.find('td').eq(4).text());
+    $('#selling_price').val(currentRow.find('td').eq(5).text());
+    $('#supplier_id').val(currentRow.find('td').eq(6).data('supplier-id'));
 
-         </script>
+    // Show Update button, hide Save button
+    $('#btnSave').hide();
+    $('#btnUpdate').show();
+
+    // Show modal
+    $('#modalForm').modal('show');
+});
+
+$('#btnmodal').click(function () {
+    // Clear form inputs
+    $('#formSave')[0].reset();
+
+    // Reset dropdowns to default
+    $('#book_id, #supplier_id').val('').trigger('change');
+
+    // Show Save button, hide Update button
+    $('#btnSave').show();
+    $('#btnUpdate').hide();
+
+    // Show modal
+    $('#modalForm').modal('show');
+});
+    // Update Stock Data
+    $('#btnUpdate').click(function () {
+      const formData = {
+         id: $('#id').val(),
+         book_id: $('#book_id').val(),
+         quantity: $('#quantity').val(),
+         purchase_price: $('#purchase_price').val(),
+         selling_price: $('#selling_price').val(),
+         supplier_id: $('#supplier_id').val(),
+         _token: "{{ csrf_token() }}",
+      };
+
+    $.ajax({
+        url: "{{ route('stock.update') }}",
+        method: "PUT",
+        data: formData,
+        success: function (response) {
+               $('#modalForm').hide('show');
+                Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Stock has been updated successfully.',
+                timer: 2000, // Modal will auto-close after 2 seconds
+                showConfirmButton: false // Hides the "OK" button
+            }).then(() => {
+                location.reload(); // Reload the page after the modal closes
+            });
+        },
+        error: function (xhr) {
+            console.error(xhr.responseJSON); // Log errors for debugging
+            alert('Validation Error: ' + xhr.responseJSON.message);
+        },
+    });
+
+    $('#modalForm').modal('hide');
+});
+
+    // Delete Stock Data
+    $('#dataTable').on('click', '.btnDelete', function () {
+        const currentRow = $(this).closest('tr');
+        const id = currentRow.find('td').eq(1).text();
+
+        if (confirm("Are you sure to delete?")) {
+            $.ajax({
+                url: "{{ route('stock.delete') }}",
+                method: "DELETE",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                },
+                success: function (response) {
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Stock has been updated successfully.',
+                        timer: 2000, // Modal will auto-close after 2 seconds
+                        showConfirmButton: false // Hides the "OK" button
+                    }).then(() => {
+                        location.reload(); // Reload the page after the modal closes
+                    });
+                },
+                error: function (xhr) {
+                    alert('Error: ' + (xhr.responseJSON ? xhr.responseJSON.message : 'Unexpected error occurred.'));
+                },
+            });
+        }
+    });
+
+    // Fetch Stock Details for Selected Book
+    $('#book_id').change(function () {
+        const bookId = $(this).val();
+
+        if (bookId) {
+            $.ajax({
+                url: '/stock/get-details',
+                method: 'GET',
+                data: { book_id: bookId },
+                success: function (response) {
+                    if (response.stock) {
+                        $('#purchase_price').val(response.stock.purchase_price);
+                        $('#selling_price').val(response.stock.selling_price);
+                        $('#supplier_id').val(response.stock.supplier_id);
+                    } else {
+                        $('#purchase_price, #selling_price').val('');
+                        $('#supplier_id').val('');
+                    }
+                },
+                error: function () {
+                    alert('Error fetching stock details.');
+                }
+            });
+        } else {
+            $('#purchase_price, #selling_price, #supplier_id').val('');
+        }
+    });
+});
+
+           
+
+   });
+
+</script>
 
 
 

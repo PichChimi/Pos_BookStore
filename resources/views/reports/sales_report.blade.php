@@ -1,4 +1,4 @@
-<div class="mb-3">
+<div class="mb-7">
     <button onclick="window.print()" class="btn btn-secondary">Print Report</button>
     <a href="{{ route('sales.report.export', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-success">Export to Excel</a>
 </div>
@@ -10,7 +10,9 @@
             <th>Sale ID</th>
             <th>Date</th>
             <th>Customer</th>
+            <th>Subtotal</th>
             <th>Total Amount</th>
+            <th>Coupon</th>
             <th>Details</th>
         </tr>
     </thead>
@@ -20,7 +22,9 @@
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $sale->created_at->format('d-m-Y') }}</td>
                 <td>N/A</td>
+                <td>${{ number_format($sale->sub_total, 2) }}</td>
                 <td>${{ number_format($sale->total, 2) }}</td>
+                <td>${{ number_format($sale->coupon, 2) }}</td>
                 <td>
                     <ul>
                         @foreach ($sale->details as $detail)
@@ -35,12 +39,12 @@
             </tr>
         @endforelse
         <tr>
-            <th colspan="4" class="text-end">Total Sales:</th>
+            <th colspan="6" class="text-end">Total Sales:</th>
             <th>${{ number_format($totalSales, 2) }}</th>
             
         </tr>
         <tr>
-            <th colspan="4" class="text-end">Total Items Sold:</th>
+            <th colspan="6" class="text-end">Total Items Sold:</th>
             <th>{{ $totalItemsSold }}</th>
         </tr>
     </tbody>

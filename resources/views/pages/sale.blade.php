@@ -11,51 +11,59 @@
    <!-- section -->
    <section class="mb-lg-14 mb-8 mt-8">
 
-      <div class="col-xxl-5 col-lg-4 d-none d-lg-block" style="margin-left: 50px">
-         <form id="barcode-form">
-            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-            <div id="success-message" class="alert alert-primary" style="display: none;"></div>
-            <div class="input-group">
-                <input id="barcode-input" class="form-control rounded" type="search" placeholder="Barcode" />
-                <span class="input-group-append">
-                    <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button" id="barcode-submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </button>
-                </span>
-            </div>
-        </form>
-      </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-xxl-5 col-lg-4 d-none d-lg-block" style="margin-left: 50px">
+                <form id="barcode-form">
+                   <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                   <div id="success-message" class="alert alert-primary" style="display: none;"></div>
+                   <div class="input-group">
+                       <input id="barcode-input" class="form-control rounded" type="search" placeholder="{{ __('globle.barcode') }}" />
+                       <span class="input-group-append">
+                           <button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="button" id="barcode-submit">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+                                   <circle cx="11" cy="11" r="8"></circle>
+                                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                               </svg>
+                           </button>
+                       </span>
+                   </div>
+               </form>
+             </div>
+        </div>
 
-         <div class="d-flex justify-content-end">
-                   <!-- Genres Navigation -->
-                   <nav>
-                     <ul class="nav nav-pills nav-scroll border-bottom-0 gap-1" id="genre-tabs" role="tablist">
-                         <!-- All tab -->
-                         <li class="nav-item">
-                             <a href="#"
-                                class="nav-link active"
-                                data-genre-id="all">
-                                   {{ __('All') }}
-                             </a>
-                         </li>
-                 
-                         <!-- Dynamic genre tabs -->
-                         @foreach($genres as $genre)
-                         <li class="nav-item">
-                             <a href="#"
-                                class="nav-link"
-                                data-genre-id="{{ $genre->id }}">
-                                   {{ $genre->{'name_' . app()->getLocale()} }}
-                             </a>
-                         </li>
-                         @endforeach
-                     </ul>
-                 </nav>
-         </div>
-      
+        <div class="col-md-6">
+            <div class="d-flex justify-content-end me-5"> 
+                <!-- Genres Navigation -->
+                <nav class="card p-2 shadow">
+                  <ul class="nav nav-pills nav-scroll border-bottom-0 gap-1" id="genre-tabs" role="tablist">
+                      <!-- All tab -->
+                      <li class="nav-item">
+                          <a href="#"
+                             class="nav-link active"
+                             data-genre-id="all">
+                                {{ __('globle.all') }}
+                          </a>
+                      </li>
+              
+                      <!-- Dynamic genre tabs -->
+                      @foreach($genres as $genre)
+                      <li class="nav-item">
+                          <a href="#"
+                             class="nav-link"
+                             data-genre-id="{{ $genre->id }}">
+                                {{ $genre->{'name_' . app()->getLocale()} }}
+                          </a>
+                      </li>
+                      @endforeach
+                  </ul>
+              </nav>
+      </div>
+        </div>
+
+    </div>
+
+     
       <div class="container-fluid">
         
          <!-- row -->
@@ -79,7 +87,7 @@
             <!-- sidebar -->
             <div class="col-12 col-lg-6 col-md-7">
                <!-- card -->
-               <div class="mb-5 card mt-6">
+               <div class="mb-5 card shadow  mt-6">
                   <div class="card-body p-6">
                       
                      <!-- Books Section -->
@@ -128,40 +136,105 @@
          });
 
         // Event listener for increment and decrement buttons
-        $(document).on('click', '.button-minus, .button-plus', function(event) {
-            event.preventDefault(); 
+        // $(document).on('click', '.button-minus, .button-plus', function(event) {
+        //     event.preventDefault(); 
 
-            const isIncrement = $(this).hasClass('button-plus');
-            const quantityField = $(this).siblings('.quantity-field');
-            const cartId = $(this).data('cart-id');
-            let quantity = parseInt(quantityField.val());
+        //     const isIncrement = $(this).hasClass('button-plus');
+        //     const quantityField = $(this).siblings('.quantity-field');
+        //     const cartId = $(this).data('cart-id');
+        //     let quantity = parseInt(quantityField.val());
 
-            // Increment or decrement the quantity
-            quantity = isIncrement ? quantity + 1 : Math.max(1, quantity - 1);
-            quantityField.val(quantity);
+        //     // Increment or decrement the quantity
+        //     quantity = isIncrement ? quantity + 1 : Math.max(1, quantity - 1);
+        //     quantityField.val(quantity);
 
-            $.ajax({
-                url: `/cart/update/${cartId}`,
-                method: 'POST',
-                data: {
-                    quantity: quantity,
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    // Update the cart summary section with new HTML
-                    if (response.subtotal && response.totalItems) {
-                        $('#cart-summary-container').html(response.cartHtml);
-                    }
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
+        //     $.ajax({
+        //         url: `/cart/update/${cartId}`,
+        //         method: 'POST',
+        //         data: {
+        //             quantity: quantity,
+        //             _token: $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success: function(response) {
+        //             if (response.error && response.error === 'out_of_stock') {
+        //     // Revert the increment if out of stock
+        //             quantity = quantity - 1; // Decrement back
+        //             quantityField.val(quantity);
+
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Out of Stock',
+        //                     text: 'Sorry, the requested quantity exceeds available stock.',
+        //                     timer: 3000,
+        //                     showConfirmButton: false
+        //                 });
+        //             } else if (response.subtotal && response.totalItems) {
+        //                 // Update the cart summary section with new HTML
+        //                 $('#cart-summary-container').html(response.cartHtml);
+        //             }
+        //             // Update the cart summary section with new HTML
+        //             // if (response.subtotal && response.totalItems) {
+        //             //     $('#cart-summary-container').html(response.cartHtml);
+        //             // }
+        //         },
+        //         error: function(xhr) {
+        //             console.error(xhr.responseText);
+        //         }
+        //     });
+        // });
+
+   $(document).on('click', '.button-minus, .button-plus', function(event) {
+    event.preventDefault();
+
+    const isIncrement = $(this).hasClass('button-plus');
+    const quantityField = $(this).siblings('.quantity-field');
+    const cartId = $(this).data('cart-id');
+    let quantity = parseInt(quantityField.val());
+
+    // Increment or decrement the quantity
+    quantity = isIncrement ? quantity + 1 : Math.max(1, quantity - 1);
+    quantityField.val(quantity);
+
+    $.ajax({
+        url: `/cart/update/${cartId}`,
+        method: 'POST',
+        data: {
+            quantity: quantity,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if (response.error && response.error === 'out_of_stock') {
+                // Log the response for debugging
+                console.log(response);
+
+                // Revert the increment if out of stock
+                if (isIncrement) {
+                    quantity = quantity - 1; // Decrement back
                 }
-            });
-        });
+                quantityField.val(quantity);
+
+                // Display the out-of-stock alert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Out of Stock',
+                    text: 'Sorry, the requested quantity exceeds available stock.',
+                    // timer: 3000,
+                    showConfirmButton: true
+                });
+            } else if (response.subtotal && response.totalItems) {
+                // Update the cart summary section with the new HTML
+                $('#cart-summary-container').html(response.cartHtml);
+            }
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+        }
+    });
+});
 
 
             // Remove Cart
-            $(document).on('click', '.remove-cart-item', function(e) {
+    $(document).on('click', '.remove-cart-item', function(e) {
             e.preventDefault();
 
             const cartId = $(this).data('cart-id');
@@ -177,7 +250,13 @@
                      _token: $('meta[name="csrf-token"]').attr('content')
                   },
                   success: function(response) {
-                     // Update the cart summary HTML
+                    Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Cart has been removed successfully.',
+                            timer: 2000, 
+                            showConfirmButton: false 
+                         })
                      $('#cart-summary-container').html(response.cartHtml);
                   },
                   error: function(xhr) {
@@ -230,21 +309,41 @@
         }
 
         
-        // Payment 
-      $(document).on('click', '.btn-pay', function () {
+    // Payment 
+    $(document).on('click', '.btn-pay', function () {
             if (!confirm('Are you sure you want to proceed with the payment?')) {
                 return;
             }
 
+            // let coupon = parseFloat($("#couponAmount").val()) || 0;
+            let coupon = parseFloat($("#coupon").val()) || 0;
+            let subtotal = parseFloat($("#subtotal").text().replace("$", "")) || 0;
+            let total = parseFloat($("#total").text().replace("$", "")) || 0;
+
+            let recived_amount = parseFloat($("#recived_amount").val()) || 0;
+            let change_return = recived_amount - total;
+
+            console.log(recived_amount + change_return);
+            
             $.ajax({
                 url: '{{ route("cart.pay") }}', // Adjust route as necessary
                 method: 'POST',
                 data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    coupon: coupon,
+                    subtotal: subtotal,
+                    total: total,
+                    recived_amount: recived_amount,
+                    change_return: change_return
                 },
                 success: function (response) {
-                    alert(response.message);
-
+                         Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Payment successfully.',
+                            timer: 2000, 
+                            showConfirmButton: false 
+                         })
                     // Display the invoice
                     $('#invoice-container').html(response.invoiceHtml).show();
 
@@ -253,7 +352,14 @@
                 },
                 error: function (xhr) {
                     if (xhr.responseJSON?.errorstock) {
-                        alert(xhr.responseJSON.errorstock);
+                        // alert(xhr.responseJSON.errorstock);
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Out of Stock',
+                        text: xhr.responseJSON.errorstock,
+                        // timer: 3000,
+                        showConfirmButton: true
+                    });
                     } else {
                         alert('Payment failed. Please try again.');
                     }
@@ -270,7 +376,7 @@
                alert('No invoice content to print.');
                return;
             }
-
+            $('#invoice-container').hide();
             // Open a new window and print the invoice
             var printWindow = window.open('', '', 'height=700,width=900');
             printWindow.document.write('<html><head><title>Invoice</title></head><body>');
@@ -278,6 +384,7 @@
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.print();
+           
          });
 
          $('#genre-tabs .nav-link').on('click', function (e) {

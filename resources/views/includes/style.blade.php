@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/theme.min.css') }}" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M8S4MT3EYG"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
    window.dataLayer = window.dataLayer || [];
    function gtag() {

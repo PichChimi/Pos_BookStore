@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-3">
+    <div class="row mb-3 mt-3">
         <div class="col-md-12">
             <h2>Employee Report</h2>
         </div>
@@ -32,7 +32,7 @@
 
     <div id="error-message" class="mt-3"></div>
 
-    <div id="employee-report" class="mt-5">
+    <div id="employee-report" class="mt-3">
         <!-- Sales report data will be loaded here -->
         @include('reports.employee_report', ['sales' => $sales, 'grandTotalSales' => $grandTotalSales, 'grandTotalItems' => $grandTotalItems])
     </div>

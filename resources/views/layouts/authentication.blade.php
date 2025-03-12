@@ -17,10 +17,10 @@
                <a class="navbar-brand" href="../index.html">
                   <img src="../assets/images/logo/freshcart-logo.svg" alt="" class="d-inline-block align-text-top" />
                </a>
-               <span class="navbar-text">
+               {{-- <span class="navbar-text">
                   Already have an account?
                   <a href="login">Sign in</a>
-               </span>
+               </span> --}}
             </div>
          </nav>
       </div>

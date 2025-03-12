@@ -14,12 +14,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Supplier</h2>
+                  <h2>{{ __('globle.supplier') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Supplier</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addsupp') }}</a>
                </div>
             </div>
          </div>
@@ -33,15 +33,15 @@
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
                         <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
+                           <input class="form-control" type="search" placeholder="{{ __('globle.searchsupp') }}" aria-label="Search" />
                         </form>
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -60,12 +60,12 @@
                                  </div>
 
                               </th>
-                              <th>No</th>
-                              <th>Name</th>
-                              <th>Company</th>
-                              <th>Phone</th>
-                              <th>Address</th>
-                              <th>Action</th>
+                              <th>{{ __('globle.no') }}</th>
+                              <th>{{ __('globle.name') }}</th>
+                              <th>{{ __('globle.company') }}</th>
+                              <th>{{ __('globle.phone') }}</th>
+                              <th>{{ __('globle.adress') }}</th>
+                              <th>{{ __('globle.action') }}</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -80,7 +80,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $supplier->id }}</td>
 
                                     <td data-name-en="{{ $supplier->name_en }}" data-name-kh="{{ $supplier->name_kh }}">
                                        {{ $supplier->{'name_' . app()->getLocale()} }}
@@ -101,13 +101,13 @@
                                              <li>
                                                 <a class="dropdown-item btnDelete" href="#">
                                                    <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
+                                                   <span class="text-danger">{{ __('globle.delete') }}</span>
                                                 </a>
                                              </li>
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#">
                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
+                                                   {{ __('globle.edit') }}
                                                 </a>
                                              </li>
                                           </ul>
@@ -139,17 +139,17 @@
                            <div class="col-lg-6">
 
                               <div class="mb-3">
-                                 <label for="name_en" class="form-label">Name English</label>
+                                 <label for="name_en" class="form-label">{{ __('globle.namen') }}</label>
                                  <input type="text" class="form-control" id="name_en" >
                               </div>
 
                               <div class="mb-3">
-                                 <label for="p_number" class="form-label">Phone Number</label>
+                                 <label for="p_number" class="form-label">{{ __('globle.phone') }}</label>
                                  <input type="text" class="form-control" id="p_number" >
                               </div>
 
                               <div class="mb-3">
-                                 <label for="address_en" class="form-label">Address En</label>
+                                 <label for="address_en" class="form-label">{{ __('globle.adressen') }}</label>
                                  <input type="text" class="form-control" id="address_en" >
                               </div>
 
@@ -159,17 +159,17 @@
                            <div class="col-lg-6">
 
                               <div class="mb-3">
-                                 <label for="name_kh" class="form-label">Name Khmer</label>
+                                 <label for="name_kh" class="form-label">{{ __('globle.namekh') }}</label>
                                  <input type="text" class="form-control" id="name_kh" >
                               </div>
 
                               <div class="mb-3">
-                                 <label for="company" class="form-label">Company</label>
+                                 <label for="company" class="form-label">{{ __('globle.company') }}</label>
                                  <input type="text" class="form-control" id="company" >
                               </div>
 
                               <div class="mb-3">
-                                 <label for="address_kh" class="form-label">Address Kh</label>
+                                 <label for="address_kh" class="form-label">{{ __('globle.adresskh') }}</label>
                                  <input type="text" class="form-control" id="address_kh" >
                               </div>
 
@@ -178,8 +178,8 @@
                         </div>
                         
 
-                        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
-                        <a href="#" id="btnUpdate" class="btn btn-primary">Update</a>
+                        <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
+                        <a href="#" id="btnUpdate" class="btn btn-primary">{{ __('globle.edit') }}</a>
                      
                   </form>
 
@@ -189,6 +189,7 @@
          </div>
 
          <!-- end Modal -->
+         
          <script>
 
              $(document).ready(function(){
@@ -232,8 +233,15 @@
                               ids: selectedIds
                            },
                            success: function(response) {
-                              // alert('Selected roles have been deleted successfully.');
-                              location.reload(); // Reload the page to reflect changes
+                                    Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Stock has been deleted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                              });
                            },
                            error: function(xhr) {
                               alert('Error occurred while deleting roles.');
@@ -277,10 +285,19 @@
                            address_kh: address_kh
                      },
                      success: function(response) {
-                              // alert('Data inserted successfully!');
-                              // window.location.href = "{{ route('author.index') }}";
-                              location.reload();
+                              // Show success modal with SweetAlert2
+                              $('#modalForm').hide();
+                              Swal.fire({
+                              icon: 'success',
+                              title: 'Success!',
+                              text: 'Supplier has been inserted successfully.',
+                              timer: 2000, // Modal will auto-close after 2 seconds
+                              showConfirmButton: false // Hides the "OK" button
+                           }).then(() => {
+                              location.reload(); // Reload the page after the modal closes
+                           });
 
+                              // Clear form fields
                               $('#name_en').val('');
                               $('#name_kh').val('');
                               $('#p_number').val('');
@@ -289,7 +306,13 @@
                               $('#address_kh').val('');
                      },
                      error: function(response) {
-                           alert('Error occurred!');
+                           Swal.fire({
+                           icon: 'error',
+                           title: 'Error!',
+                           text: 'An error occurred while inserting the data.',
+                           timer: 2000, // Modal will auto-close after 2 seconds
+                           showConfirmButton: false // Hides the "OK" button
+                        });
                      }
                   });
 
@@ -318,6 +341,8 @@
                     $('#modalForm').modal('show');
                     $('#btnSave').hide();
 
+                  });
+
                     $('#btnUpdate').click(function(){
                         var id = $('#id').val();
                         var name_en = $('#name_en').val();
@@ -341,20 +366,27 @@
                                  address_kh: address_kh
                             },
                             success: function(response) {
-                                    // alert('Data updated successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
+                                 $('#modalForm').hide();
+                                 Swal.fire({
+                                 icon: 'success',
+                                 title: 'Success!',
+                                 text: 'Supplier has been updated successfully.',
+                                 timer: 2000, // Modal will auto-close after 2 seconds
+                                 showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                 location.reload(); // Reload the page after the modal closes
+                              });
+
                             },
                             error: function(response) {
                                 alert('Error occurred!');
                             }
-                        });
 
-                    });
-                    $('#modalForm').modal('hide');
+                        })
+
+                     });
                     
-                     
-                  });
+                   
                   //  end Edit
 
                   // Delete
@@ -371,9 +403,16 @@
                                 id: id,
                             },
                             success: function(response) {
-                                    // alert('Data Delete successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
+                                    Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Supplier has been deleted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                                 }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                                 });
+
                             },
                             error: function(response) {
                                 alert('Error occurred!');
@@ -383,11 +422,9 @@
 
                 });
 
-              });
+            });
 
-         </script>
-
-
+   </script>
 
                <div class="border-top d-flex justify-content-between align-items-md-center px-6 py-6 flex-md-row flex-column gap-4">
                   

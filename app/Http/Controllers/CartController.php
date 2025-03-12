@@ -51,39 +51,75 @@ class CartController extends Controller
         return response()->json(['cartHtml' => $cartHtml]);
     }
 
-        private function calculateCartTotals()
+    private function calculateCartTotals()
         {
             $cartItems = Cart::all();
             $subtotal = $cartItems->sum('total');
             $totalItems = $cartItems->sum('quantity');
 
             return compact('cartItems', 'subtotal', 'totalItems');
-        }
+    }
 
 
-    public function updateCartItem(Request $request, $cartId)
-        {
-            $cartItem = Cart::findOrFail($cartId);
-              // Retrieve selling price from stock
-            $sellingPrice = $cartItem->stock->selling_price;
+    // public function updateCartItem(Request $request, $cartId)
+    
+    //     {
+    //         $cartItem = Cart::findOrFail($cartId);
+    //         $stock = Stock::where('book_id', $cartItem->book_id)->first();
+    //           // Retrieve selling price from stock
+    //         $sellingPrice = $cartItem->stock->selling_price;
             
-            $cartItem->quantity = $request->quantity;
-            $cartItem->total = $cartItem->quantity * $sellingPrice;
-            $cartItem->save();
+    //         $cartItem->quantity = $request->quantity;
+    //         $cartItem->total = $cartItem->quantity * $sellingPrice;
+    //         $cartItem->save();
          
 
-           // Get updated cart data
-            $totals = $this->calculateCartTotals();
-            $cartHtml = view('pages.cart-summary', $totals)->render();
+    //        // Get updated cart data
+    //         $totals = $this->calculateCartTotals();
+    //         $cartHtml = view('pages.cart-summary', $totals)->render();
 
-            return response()->json([
-                'cartHtml' => $cartHtml,
-                'subtotal' => $totals['subtotal'],
-                'totalItems' => $totals['totalItems']
-           ]);
+    //         return response()->json([
+    //             'cartHtml' => $cartHtml,
+    //             'subtotal' => $totals['subtotal'],
+    //             'totalItems' => $totals['totalItems']
+    //        ]);
+    //     }
+
+    public function updateCartItem(Request $request, $cartId)
+    {
+        $cartItem = Cart::findOrFail($cartId);
+        $stock = Stock::where('book_id', $cartItem->book_id)->first();
+    
+        // Ensure stock exists
+        if (!$stock) {
+            return response()->json(['error' => 'Stock not found']);
         }
+    
+        // Check if the requested quantity exceeds the available stock
+        if ($request->quantity > $stock->quantity) {
+            return response()->json(['error' => 'out_of_stock']);
+        }
+    
+        // Retrieve selling price from stock
+        $sellingPrice = $stock->selling_price;
+    
+        // Update the cart item
+        $cartItem->quantity = $request->quantity;
+        $cartItem->total = $cartItem->quantity * $sellingPrice;
+        $cartItem->save();
+    
+        // Get updated cart data
+        $totals = $this->calculateCartTotals();
+        $cartHtml = view('pages.cart-summary', $totals)->render();
+    
+        return response()->json([
+            'cartHtml' => $cartHtml,
+            'subtotal' => $totals['subtotal'],
+            'totalItems' => $totals['totalItems']
+        ]);
+    }
 
-        public function removeFromCart($cartId)
+    public function removeFromCart($cartId)
             {
                 $cartItem = Cart::findOrFail($cartId);
                 $cartItem->delete();
@@ -99,10 +135,9 @@ class CartController extends Controller
                     'message' => 'Item removed from cart successfully.',
                     'cartHtml' => $cartHtml
                 ]);
-            }
+    }
 
-
-            public function addToCartByBarcode(Request $request)
+    public function addToCartByBarcode(Request $request)
                 {
                     $barcode = $request->input('barcode');
 
@@ -145,84 +180,43 @@ class CartController extends Controller
                         'success' => 'Item added to cart successfully.',
                         'cartHtml' => $cartHtml,
                     ]);
-                }
-
-
-                // public function pay(Request $request)
-                // {
-                //     try {
-                //         // Start database transaction
-                //         DB::beginTransaction();
-                
-                //         // Fetch all cart items
-                //         $cartItems = Cart::all();
-                
-                //         if ($cartItems->isEmpty()) {
-                //             return response()->json(['error' => 'Cart is empty.'], 400);
-                //         }
-                
-                //         // Calculate totals
-                //         $subtotal = $cartItems->sum('total');
-                
-                //         // Create Sale record
-                //         $sale = Sale::create([
-                //             'customers_id' => 1, // Replace with actual customer ID
-                //             'employee_id' => 1,  // Replace with actual employee ID
-                //             'sub_total' => $subtotal,
-                //             'total' => $subtotal,
-                //         ]);
-                
-                //         // Create SaleDetail records and adjust stock
-                //         foreach ($cartItems as $cartItem) {
-                //             $stock = Stock::where('book_id', $cartItem->book_id)->first();
-                
-                //             if (!$stock || $stock->quantity < $cartItem->quantity) {
-                //                 DB::rollBack();
-                //                 return response()->json(['error' => 'Insufficient stock for book ID ' . $cartItem->book_id], 400);
-                //             }
-                
-                //             SaleDetail::create([
-                //                 'sale_id' => $sale->id,
-                //                 'book_id' => $cartItem->book_id,
-                //                 'quantity' => $cartItem->quantity,
-                //                 'unit_price' => $stock->selling_price,
-                //                 'total' => $cartItem->total,
-                //             ]);
-                
-                //             $stock->quantity -= $cartItem->quantity;
-                //             $stock->save();
-                //         }
-                
-                //         // Clear the cart
-                //         Cart::truncate();
-                
-                //         // Commit the transaction
-                //         DB::commit();
-                
-                //         return response()->json(['message' => 'Payment successful.']);
-                //     } catch (\Exception $e) {
-                //         DB::rollBack();
-                //         return response()->json(['error' => 'Payment failed: ' . $e->getMessage()], 500);
-                //     }
-                // }
-
-                public function pay(Request $request)
+    }
+    public function pay(Request $request)
                 {
                     try {
                         DB::beginTransaction();
-
                         // Fetch cart items
                         $cartItems = Cart::with('book')->get();
+
                         if ($cartItems->isEmpty()) {
                             return response()->json(['error' => 'Your cart is empty.'], 400);
                         }
 
+                        // Get coupon and subtotal values from request
+                        // $coupon = $request->coupon ?? 0;
+                        // $subtotal = $request->subtotal ?? $cartItems->sum('total');
+                        // // $total = $subtotal - $coupon; // Apply discount
+                        // $total = $request->total ?? 0;
+                         // Get the coupon value from the request
+                           
+                            // Calculate subtotal and total after coupon
+                            $subtotal = $cartItems->sum('total');
+                            $total = $request->total ?? 0; // Ensure total is never negative
+                            $coupon = floatval($request->input('coupon', 0));
+                            $recived_amount = floatval($request->input('recived_amount', 0));
+                            // $change_return = floatval($request->input('change_return', 0));
+                            $change_return = $request->change_return ?? 0; // Ensure total is never negative
+
+                    
                         // Create a sale record
                         $sale = Sale::create([
                             'customers_id' => 1, // Replace with actual customer ID
                             'employee_id' => Auth::user()->id,
-                            'sub_total' => $cartItems->sum('total'),
-                            'total' => $cartItems->sum('total'),
+                            'sub_total' => $subtotal,
+                            'total' => $total,
+                            'coupon' => $coupon,
+                            'recived_amount' => $recived_amount,
+                            'change_return' => $change_return
                         ]);
 
                         // Add details to SaleDetailTbl and update stock
@@ -250,13 +244,12 @@ class CartController extends Controller
 
                         // Generate invoice HTML
                         $invoiceHtml = view('partials.invoice', compact('sale', 'cartItems'))->render();
-
                         return response()->json(['message' => 'Payment successful!', 'invoiceHtml' => $invoiceHtml]);
                     } catch (\Exception $e) {
                         DB::rollBack();
                         return response()->json(['error' => $e->getMessage()], 500);
                     }
-                }
-                
+    }
 
+             
 }

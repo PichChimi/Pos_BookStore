@@ -7,11 +7,26 @@ use Illuminate\Http\Request;
 
 class GenresController extends Controller
 {
-    public function index(){
-        $genres = Genres::get();
-        return view('pages.genres',[
-            'genress' => $genres
-        ]);
+    public function index(Request $request){
+        $query = Genres::query(); // Use query builder
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('name_en', 'LIKE', "%$search%")
+                  ->orWhere('name_kh', 'LIKE', "%$search%");
+            });
+        }
+    
+        $genress = $query->get(); // Fetch the filtered results
+    
+        // If it's an AJAX request, return only the genres list
+        if ($request->ajax()) {
+            return view('partials.genres-list', compact('genress'))->render();
+        }
+    
+        // Return the full page for normal requests
+        return view('pages.genres', compact('genress'));
     }
 
     public function store(Request $request){

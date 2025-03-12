@@ -28,7 +28,7 @@ return [
     'supplier' => 'Supplier',
     'report' => 'Reports',
     'salereport' => 'Total Sale Report',
-    'cashreport' => 'Total Cash Report',
+    'cashreport' => 'Empolyee Report',
     'sale' => 'Sale',
 
     //Dashboar
@@ -52,8 +52,57 @@ return [
     'name' => 'Name',
     'email' => 'Email',
     'action' => 'Action',
+    'pass' => 'Password',
 
     'searchrole' => 'Search Role',
     'addrole' => 'Add New Role',
+
+    //Sale
+    'all' => 'All',
+    'barcode' => 'Barcode',
+    'cartEmpty' => 'Your cart is empty.',
+    'subtotal' => 'Subtotal',
+    'total' => 'Total',
+    'totalItem' => 'Total (Item)',
+    'pay' => 'Pay',
+    'remove' => 'Remove',
+    //Stock
+    'searchsupp' => 'Search Supplier',
+    'searchstock' => 'Search Stock',
+    'addstock' => 'Add New Stock',
+    'qty' => 'Quantity on hand',
+    'price' => 'Price',
+    'const' => 'Cost',
+
+    //Supplier
+    'addsupp' => 'Add New Supplier',
+    'company' => 'Company',
+    'phone' => 'Phone',
+    'adress' => 'Address',
+    'adressen' => 'Address Khmer',
+    'adresskh' => 'Address English',
+
+    //Book
+    'searchbook' => 'Search Book',
+    'addbook' => 'Add New Book',
+    'coverbook' => 'Cover Book',
+    'title' => 'Title',
+    'titlekh' => 'Title Khmer',
+    'titlen' => 'Title English',
+    'save' => 'Save',
+
+
+   //Authore
+   'searchauthors' => 'Search Authors',
+   'addauthore' => 'Add New Authors',
+   'nationality' => 'Nationality',
+   'na_kh' => 'Nationality Khmer',
+   'na_en' => 'Nationality English',
+
+   //Genres
+   'addgenres' => 'Add new Genres',
+   'searchgenres' => 'Search Genres',
+   'namekh' => 'Name Khmer',
+   'namen'=> 'Name English',
 
 ];

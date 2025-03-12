@@ -14,12 +14,12 @@
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                <!-- pageheader -->
                <div>
-                  <h2>Authors</h2>
+                  <h2>{{ __('globle.authors') }}</h2>
                  
                </div>
                <!-- button -->
                <div>
-                  <a href="#" id="btnmodal" class="btn btn-primary">Add New Author</a>
+                  <a href="#" id="btnmodal" class="btn btn-primary">{{ __('globle.addauthore') }}</a>
                </div>
             </div>
          </div>
@@ -33,15 +33,15 @@
                      <div class="col-lg-4 col-md-6 col-12 mb-2 mb-md-0">
                         <!-- form -->
                         <form class="d-flex" role="search">
-                           <input class="form-control" type="search" placeholder="Search Category" aria-label="Search" />
+                           <input class="form-control" type="search" placeholder="{{ __('globle.searchauthors') }}" aria-label="Search" />
                         </form>
                      </div>
                      <!-- select option -->
                      {{-- <button id="deleteSelected" class="btn btn-danger">Delete Selected</button> --}}
                      <div class="col-xl-2 col-md-4 col-12">
                         <select class="form-select" id="statusSelect">
-                           <option selected>Status</option>
-                           <option value="deleteSelected">Delete Selected</option>
+                           <option selected>{{ __('globle.status') }}</option>
+                           <option value="deleteSelected">{{ __('globle.deleteDelected') }}</option>
                         </select>
                      </div>
                   </div>
@@ -60,10 +60,10 @@
                                  </div>
 
                               </th>
-                              <th>No</th>
-                              <th>Name</th>
-                              <th>Nationality</th>
-                              <th>Action</th>
+                              <th>{{ __('globle.no') }}</th>
+                              <th>{{ __('globle.name') }}</th>
+                              <th>{{ __('globle.nationality') }}</th>
+                              <th>{{ __('globle.action') }}</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -78,7 +78,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $author->id }}</td>
 
                                     <td data-name-en="{{ $author->name_en }}" data-name-kh="{{ $author->name_kh }}">
                                        {{ $author->{'name_' . app()->getLocale()} }}
@@ -97,13 +97,13 @@
                                              <li>
                                                 <a class="dropdown-item btnDelete" href="#">
                                                    <i class="bi bi-trash me-3 text-danger"></i>
-                                                   <span class="text-danger">Delete</span>
+                                                   <span class="text-danger">{{ __('globle.delete') }}</span>
                                                 </a>
                                              </li>
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#">
                                                    <i class="bi bi-pencil-square me-3"></i>
-                                                   Edit
+                                                   {{ __('globle.edit') }}
                                                 </a>
                                              </li>
                                           </ul>
@@ -131,27 +131,27 @@
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_en" class="form-label">Name English</label>
+                        <label for="name_en" class="form-label">{{ __('globle.namen') }}</label>
                         <input type="text" class="form-control" id="name_en" >
                         </div>
 
                         <div class="mb-3">
-                        <label for="name_kh" class="form-label">Name Khmer</label>
+                        <label for="name_kh" class="form-label">{{ __('globle.namekh') }}</label>
                         <input type="text" class="form-control" id="name_kh" >
                         </div>
 
                         <div class="mb-3">
-                        <label for="nationality_en" class="form-label">Nationality English</label>
+                        <label for="nationality_en" class="form-label">{{ __('globle.na_en') }}</label>
                         <input type="text" class="form-control" id="nationality_en" >
                         </div>
 
                         <div class="mb-3">
-                        <label for="nationality_kh" class="form-label">Nationality Khmer</label>
+                        <label for="nationality_kh" class="form-label">{{ __('globle.na_kh') }}</label>
                         <input type="text" class="form-control" id="nationality_kh" >
                         </div>
 
-                        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
-                        <a href="#" id="btnUpdate" class="btn btn-primary">Update</a>
+                        <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
+                        <a href="#" id="btnUpdate" class="btn btn-primary">{{ __('globle.edit') }}</a>
                      
                   </form>
 
@@ -204,8 +204,15 @@
                               ids: selectedIds
                            },
                            success: function(response) {
-                              // alert('Selected roles have been deleted successfully.');
-                              location.reload(); // Reload the page to reflect changes
+                              Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Authors has been deleted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                              });
                            },
                            error: function(xhr) {
                               alert('Error occurred while deleting roles.');
@@ -245,13 +252,16 @@
                            nationality_kh: nationality_kh
                      },
                      success: function(response) {
-                              // alert('Data inserted successfully!');
-                              // window.location.href = "{{ route('author.index') }}";
-                              location.reload();
-                              $('#name_en').val('');
-                              $('#name_kh').val('');
-                              $('#nationality_kh').val('');
-                              $('#nationality_en').val('');
+                          $('#modalForm').modal('hide');
+                            Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Authors has been inserted successfully.',
+                                    timer: 2000, // Modal will auto-close after 2 seconds
+                                    showConfirmButton: false // Hides the "OK" button
+                              }).then(() => {
+                                    location.reload(); // Reload the page after the modal closes
+                              });
                      },
                      error: function(response) {
                            alert('Error occurred!');
@@ -298,9 +308,16 @@
                                 nationality_kh: nationality_kh
                             },
                             success: function(response) {
-                                    // alert('Data updated successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
+                              $('#modalForm').modal('hide');
+                              Swal.fire({
+                                       icon: 'success',
+                                       title: 'Success!',
+                                       text: 'Authors has been updated successfully.',
+                                       timer: 2000, // Modal will auto-close after 2 seconds
+                                       showConfirmButton: false // Hides the "OK" button
+                                 }).then(() => {
+                                       location.reload(); // Reload the page after the modal closes
+                                 });
                             },
                             error: function(response) {
                                 alert('Error occurred!');
@@ -308,9 +325,8 @@
                         });
 
                     });
-                    $('#modalForm').modal('hide');
                     
-                     
+                  
                   });
                   //  end Edit
 
@@ -328,9 +344,15 @@
                                 id: id,
                             },
                             success: function(response) {
-                                    // alert('Data Delete successfully!');
-                                    // window.location.href = "{{ route('author.index') }}";
-                                    location.reload();
+                              Swal.fire({
+                                       icon: 'success',
+                                       title: 'Success!',
+                                       text: 'Authors has been deleted successfully.',
+                                       timer: 2000, // Modal will auto-close after 2 seconds
+                                       showConfirmButton: false // Hides the "OK" button
+                                 }).then(() => {
+                                       location.reload(); // Reload the page after the modal closes
+                                 });
                             },
                             error: function(response) {
                                 alert('Error occurred!');

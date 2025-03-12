@@ -9,15 +9,53 @@ use App\Models\Genres;
 
 class BookController extends Controller
 {
-    public function index(){
-        $author = Authors::get();
-        $genres = Genres::get();
-        $book = Book::get();
-        return view('pages.book',[
-            'authorses' => $author,
-            'genreses' => $genres,
-            'books' => $book
-        ]);
+    public function index(Request $request){
+
+        // -------- Not Reload Page --------
+        $query = Book::with(['genres']);
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('title_en', 'LIKE', "%$search%")
+                ->orWhere('title_kh', 'LIKE', "%$search%");
+            });
+        }
+
+        $books = $query->get();
+        $authorses = Authors::all();
+        $genreses = Genres::all();
+
+        // If it's an AJAX request, return only the book list
+        if ($request->ajax()) {
+            return view('partials.book-list', compact('books'))->render();
+        }
+
+        // Return the full page for normal requests
+        return view('pages.book', compact('authorses', 'genreses', 'books'));
+        
+        // -------- End Not Reload Page --------
+
+        // -------- Static --------
+        // $query = Book::query();
+        // if ($request->has('search')) {
+        //     $search = trim($request->input('search'));
+        //     $query->where(function ($q) use ($search) {
+        //         $q->where('title_en', 'LIKE', "%$search%")
+        //         ->orWhere('title_kh', 'LIKE', "%$search%");
+        //     });
+        // }
+        // $books = $query->get();
+        // $authors = Authors::all();
+        // $genres = Genres::all();
+
+        // return view('pages.book', [
+        //     'authorses' => $authors,
+        //     'genreses' => $genres,
+        //     'books' => $books
+        // ]);
+         // -------- end Static --------
+       
     }
 
     

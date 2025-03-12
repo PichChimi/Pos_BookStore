@@ -63,9 +63,9 @@
                               <th>{{ __('globle.no') }}</th>
                               <th>{{ __('globle.profile') }}</th>
                               <th>{{ __('globle.name') }}</th>
-                              <th>{{ __('globle.emal') }}</th>
+                              <th>{{ __('globle.email') }}</th>
                               <th>{{ __('globle.role') }}</th>
-                              <th>{{ __('globle.action') }}Action</th>
+                              <th>{{ __('globle.action') }}</th>
                               <th></th>
                            </tr>
                         </thead>
@@ -81,7 +81,7 @@
                                        </div>
                                     </td>
                               
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $user->id }}</td>
                                     <td>
                                        <a href="#!"><img src="{{ Storage::url($user->profile) }}" alt="" class="icon-shape icon-md" /></a>
                                     </td>
@@ -90,7 +90,7 @@
                                    <td>{{ $user->email }}</td>
                                    <td data-role-id="{{ $user->role_id }}">{{ $user->role ? $user->role->{'name_' . app()->getLocale()} : 'No Role Assigned' }}</td>
 
-
+                                   @if ($user->role && $user->role->name_en !== 'Admin')
                                     <td>
                                        <div class="dropdown">
                                           <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -103,6 +103,7 @@
                                                    <span class="text-danger">{{ __('globle.delete') }}</span>
                                                 </a>
                                              </li>
+                                            
                                              <li>
                                                 <a class="dropdown-item btnEdit" href="#" data-id="{{ $user->id }}">
                                                    <i class="bi bi-pencil-square me-3"></i>
@@ -112,6 +113,8 @@
                                           </ul>
                                        </div>
                                     </td>
+                                    @endif
+
                                  </tr>
                            @endforeach
 
@@ -134,26 +137,26 @@
                                   <div class="row">
                                       <div class="col-lg-6">
                                           <div class="mb-3">
-                                              <label for="name" class="form-label">Name</label>
+                                              <label for="name" class="form-label">{{ __('globle.name') }}</label>
                                               <input type="text" class="form-control" id="name" name="name">
                                           </div>
                                       </div>
               
                                       <div class="col-lg-6">
                                           <div class="mb-3">
-                                              <label for="email" class="form-label">Email</label>
+                                              <label for="email" class="form-label">{{ __('globle.email') }}</label>
                                               <input type="text" class="form-control" id="email" name="email">
                                           </div>
                                       </div>
                                   </div>
               
                                   <div class="mb-3" id="editpass">
-                                      <label for="password" class="form-label">Password</label>
+                                      <label for="password" class="form-label">{{ __('globle.pass') }}</label>
                                       <input type="text" class="form-control" id="password" name="password">
                                   </div>
               
                                   <div class="mb-3">
-                                      <label class="form-label">Role</label>
+                                      <label class="form-label">{{ __('globle.role') }}</label>
                                       <select class="form-select" id="role_id" name="role_id">
                                           @foreach($roles as $role)
                                           <option value="{{ $role->id }}">{{ $role->name_en }}</option>
@@ -161,7 +164,7 @@
                                       </select>
                                   </div>
               
-                                  <label class="form-label">Profile</label>
+                                  <label class="form-label">{{ __('globle.profile') }}</label>
                                   <div class="mb-4 d-flex">
                                       <div class="position-relative">
                                           <img class="image icon-shape icon-xxxl bg-light rounded-4" src="../assets/images/icons/user-profile.svg" alt="Image" />
@@ -177,7 +180,7 @@
                                   </div>
               
                                   <!-- Dynamic Save/Update Button -->
-                                  <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+                                  <button type="submit" id="btnSave" class="btn btn-primary">{{ __('globle.save') }}</button>
                               </form>
                           </div>
                       </div>
